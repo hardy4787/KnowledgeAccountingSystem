@@ -22,7 +22,7 @@ namespace KnowledgeAccountingSystem
             string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             ProgrammerService DbProduct = new ProgrammerService(new EFUnitOfWork(connectionString));
 
-            Console.WriteLine("Товары заданной категорииkek:");
+            Console.WriteLine("Товары заданной категорииkekаыа:");
             foreach (var item in DbProduct.GetAll())
                 System.Console.WriteLine(item.Id + " " + item.FullName + " " + item.Age);
             Console.WriteLine();
