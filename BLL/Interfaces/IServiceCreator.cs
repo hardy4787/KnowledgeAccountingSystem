@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Interfaces
+namespace BLL.Interfaces
 {
-    class IClientManager
+    public interface IServiceCreator
     {
+        IUserService CreateUserService(string connection);
     }
 }

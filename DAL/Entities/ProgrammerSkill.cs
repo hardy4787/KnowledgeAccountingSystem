@@ -12,7 +12,7 @@ namespace DAL.Entities
     {
 
         [Key, Column(Order = 0)]
-        public int ProgrammerId { get; set; }
+        public string ProgrammerId { get; set; }
         [Key, Column(Order = 1)]
         public int SkillId { get; set; }
 

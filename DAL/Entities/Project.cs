@@ -8,11 +8,11 @@ namespace DAL.Entities
 {
     public class Project
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public DateTime EntryDate { get; set; }
         public DateTime CloseDate { get; set; }
-        public int? ProgrammerId { get; set; }
+        public string ProgrammerId { get; set; }
         public virtual Programmer Programmer { get; set; }
         public virtual ICollection<PerformedTask> PerformedTasks { get; set; }
         public Project()

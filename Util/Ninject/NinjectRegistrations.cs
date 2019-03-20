@@ -16,6 +16,7 @@ namespace Util.Ninject
         public override void Load()
         {
             Bind<IProgrammerService>().To<ProgrammerService>().InSingletonScope();
+            Bind<IUserService>().To<UserService>().InSingletonScope();
             Bind<IUnitOfWork>().To<EFUnitOfWork>().WithConstructorArgument("DefaultConnection");
         }
     }

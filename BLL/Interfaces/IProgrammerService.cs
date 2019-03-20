@@ -9,5 +9,7 @@ namespace BLL.Interfaces
 {
     public interface IProgrammerService : IDefaultService<ProgrammerDTO>
     {
+        IEnumerable<ProgrammerDTO> GetBySkill(int id);
+        void Dispose();
     }
 }

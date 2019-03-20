@@ -340,3 +340,8 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/DAL/Entities/ApplicationRole.cs
+/DAL/Entities/ApplicationUser.cs
+/DAL/Identity/ApplicationRoleManager.cs
+/DAL/Identity/ApplicationUserManager.cs
+/DAL/Interfaces/IClientManager.cs

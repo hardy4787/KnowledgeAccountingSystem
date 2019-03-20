@@ -1,6 +1,8 @@
 ﻿using DAL.EF;
 using DAL.Entities;
+using DAL.Identity;
 using DAL.Interfaces;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +18,40 @@ namespace DAL.Repositories
         private ProgrammerRepository programmerRepository;
         private SkillRepository skillRepository;
         private ProjectRepository projectRepository;
+        private EducationRepository educationRepository;
+        private ProgrammerSkillRepository programmerSkillRepository;
         private PerformedTaskRepository performedTaskRepository;
+
+        private ApplicationUserManager userManager;
+        private ApplicationRoleManager roleManager;
+
         public EFUnitOfWork(string connectionString)
         {
             db = new KnowledgeAccountingContext(connectionString);
+        }
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                if (userManager == null)
+                    userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
+                return userManager;
+            }
+        }
+
+        public ApplicationRoleManager RoleManager
+        {
+            get
+            {
+                if (roleManager == null)
+                    roleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(db));
+                return roleManager;
+            }
+        }
+
+        public async Task SaveAsync()
+        {
+            await db.SaveChangesAsync();
         }
         public IRepository<Programmer> Programmers
         {
@@ -28,6 +60,15 @@ namespace DAL.Repositories
                 if (programmerRepository == null)
                     programmerRepository = new ProgrammerRepository(db);
                 return programmerRepository;
+            }
+        }
+        public IRepository<ProgrammerSkill> ProgrammerSkills
+        {
+            get
+            {
+                if (programmerSkillRepository == null)
+                    programmerSkillRepository = new ProgrammerSkillRepository(db);
+                return programmerSkillRepository;
             }
         }
 
@@ -59,6 +100,17 @@ namespace DAL.Repositories
             }
         }
 
+        public IRepository<Education> Educations
+        {
+            get
+            {
+                if (educationRepository == null)
+                    educationRepository = new EducationRepository(db);
+                return educationRepository;
+            }
+        }
+
+
         public void Save()
         {
             db.SaveChanges();
@@ -82,6 +134,11 @@ namespace DAL.Repositories
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        ~EFUnitOfWork()
+        {
+            Dispose(false);
         }
     }
 }

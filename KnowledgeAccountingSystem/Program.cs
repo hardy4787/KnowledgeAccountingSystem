@@ -22,12 +22,9 @@ namespace KnowledgeAccountingSystem
             string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             ProgrammerService DbProduct = new ProgrammerService(new EFUnitOfWork(connectionString));
 
-            Console.WriteLine("Товары заданной категорииkekаыа:");
-            foreach (var item in DbProduct.GetAll())
+            foreach (var item in DbProduct.GetBySkill(1))
                 System.Console.WriteLine(item.Id + " " + item.FullName + " " + item.Age);
             Console.WriteLine();
-
-            DbProduct.Insert(new BLL.DTO.ProgrammerDTO { FullName = "Петух" });
         }
     }
 }
