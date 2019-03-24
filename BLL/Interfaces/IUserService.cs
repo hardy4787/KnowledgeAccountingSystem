@@ -1,5 +1,6 @@
 ﻿using BLL.DTO;
 using BLL.Infrastructure;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,9 @@ namespace BLL.Interfaces
     public interface IUserService : IDisposable
     {
         Task<OperationDetails> Create(UserDTO userDto);
-        Task<ClaimsIdentity> Authenticate(UserDTO userDto);
+        Task<IdentityUser> FindUser(string userName, string password);
+        //Task<ClaimsIdentity> Authenticate(string userName, string password);
+        
         Task SetInitialData(UserDTO adminDto, List<string> roles);
     }
 }

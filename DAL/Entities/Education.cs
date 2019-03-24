@@ -14,6 +14,6 @@ namespace DAL.Entities
         public DateTime EntryDate { get; set; }
         public DateTime CloseDate { get; set; }
         public string ProgrammerId { get; set; }
-        public virtual Programmer Programmer { get; set; }
+        public virtual ProgrammerProfile Programmer { get; set; }
     }
 }

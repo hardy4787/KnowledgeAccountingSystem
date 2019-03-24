@@ -12,7 +12,7 @@ namespace Util
     {
         public ApplicationProfile()
         {
-            CreateMap<ProgrammerDTO, Programmer>().ReverseMap();
+            CreateMap<ProgrammerDTO, ProgrammerProfile>().ReverseMap();
         }
     }
 }

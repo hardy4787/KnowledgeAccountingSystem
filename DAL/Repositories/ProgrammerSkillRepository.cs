@@ -23,7 +23,6 @@ namespace DAL.Repositories
             if (programmerSkill != null)
                 db.ProgrammerSkills.Remove(programmerSkill);
         }
-
         public ProgrammerSkill Get(int id)
         {
             return db.ProgrammerSkills.Find(id);

@@ -16,7 +16,7 @@ namespace DAL.EF
         //{
         //    Database.SetInitializer<KnowledgeAccountingContext>(new KnowledgeAccountingDbInitializer());
         //}
-        public DbSet<Programmer> Programmers { get; set; }
+        public DbSet<ProgrammerProfile> Programmers { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<Education> Educations { get; set; }

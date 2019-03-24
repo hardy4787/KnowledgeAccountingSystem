@@ -9,6 +9,6 @@ namespace DAL.Entities
 {
     public class ApplicationUser : IdentityUser
     {
-        public virtual Programmer Programmer { get; set; }
+        public virtual ProgrammerProfile Programmer { get; set; }
     }
 }

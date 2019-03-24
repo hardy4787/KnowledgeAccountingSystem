@@ -15,7 +15,7 @@ namespace DAL.Repositories
     {
         private KnowledgeAccountingContext db;
 
-        private ProgrammerRepository programmerRepository;
+        private IClientManager programmerManager;
         private SkillRepository skillRepository;
         private ProjectRepository projectRepository;
         private EducationRepository educationRepository;
@@ -53,13 +53,13 @@ namespace DAL.Repositories
         {
             await db.SaveChangesAsync();
         }
-        public IRepository<Programmer> Programmers
+        public IClientManager ProgrammerProfiles
         {
             get
             {
-                if (programmerRepository == null)
-                    programmerRepository = new ProgrammerRepository(db);
-                return programmerRepository;
+                if (programmerManager == null)
+                    programmerManager = new ProgrammerManager(db);
+                return programmerManager;
             }
         }
         public IRepository<ProgrammerSkill> ProgrammerSkills

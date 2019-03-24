@@ -19,12 +19,12 @@ namespace KnowledgeAccountingSystem
         {
             AutoMapper.Mapper.Initialize(cfg => cfg.AddProfile<ApplicationProfile>());
 
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            ProgrammerService DbProduct = new ProgrammerService(new EFUnitOfWork(connectionString));
+            //string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            //ProgrammerService DbProduct = new ProgrammerService(new EFUnitOfWork(connectionString));
 
-            foreach (var item in DbProduct.GetBySkill(1))
-                System.Console.WriteLine(item.Id + " " + item.FullName + " " + item.Age);
-            Console.WriteLine();
+            //foreach (var item in DbProduct.GetBySkill(1))
+            //    System.Console.WriteLine(item.Id + " " + item.FullName + " " + item.Age);
+            //Console.WriteLine();
         }
     }
 }

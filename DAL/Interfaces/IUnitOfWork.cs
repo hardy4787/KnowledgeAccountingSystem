@@ -10,7 +10,7 @@ namespace DAL.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
-        IRepository<Programmer> Programmers { get; }
+        IClientManager ProgrammerProfiles { get; }
         IRepository<Skill> Skills { get; }
         IRepository<Education> Educations { get; }
         IRepository<PerformedTask> PerformedTasks { get; }
