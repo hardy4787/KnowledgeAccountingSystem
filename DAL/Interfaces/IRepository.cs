@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<TClass, TId> where TClass : class
     {
-        IEnumerable<T> GetAll();
-        T Get(int id);
-        void Insert(T item);
-        void Update(T item);
-        void Delete(int id);
+        IEnumerable<TClass> GetAll();
+        TClass Get(TId id);
+        void Insert(TClass item);
+        void Update(TClass item);
+        void Delete(TId id);
     }
 }

@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-    public class ProgrammerManager : IClientManager
+    public class ProgrammerProfileRepository : IRepository<ProgrammerProfile, string>
     {
         private KnowledgeAccountingContext db;
-        public ProgrammerManager(KnowledgeAccountingContext context)
+        public ProgrammerProfileRepository(KnowledgeAccountingContext context)
         {
             this.db = context;
 
@@ -35,7 +35,7 @@ namespace DAL.Repositories
             return db.Programmers;
         }
 
-        public void Create(ProgrammerProfile programmer)
+        public void Insert(ProgrammerProfile programmer)
         {
             db.Programmers.Add(programmer);
         }

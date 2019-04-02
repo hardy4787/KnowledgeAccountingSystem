@@ -10,22 +10,22 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-    public class ProgrammerSkillRepository : IRepository<ProgrammerSkill>
+    public class ProgrammerSkillRepository : IProgrammerSkillRepository
     {
         private KnowledgeAccountingContext db;
         public ProgrammerSkillRepository(KnowledgeAccountingContext context)
         {
             this.db = context;
         }
-        public void Delete(int id)
+        public void Delete(string idProgrammer, int idSkill)
         {
-            ProgrammerSkill programmerSkill = db.ProgrammerSkills.Find(id);
+            ProgrammerSkill programmerSkill = db.ProgrammerSkills.SingleOrDefault(x => x.ProgrammerId == idProgrammer && x.SkillId == idSkill);
             if (programmerSkill != null)
                 db.ProgrammerSkills.Remove(programmerSkill);
         }
-        public ProgrammerSkill Get(int id)
-        {
-            return db.ProgrammerSkills.Find(id);
+        public ProgrammerSkill Get(string idProgrammer, int idSkill)
+        { 
+            return db.ProgrammerSkills.SingleOrDefault(x => x.ProgrammerId == idProgrammer && x.SkillId == idSkill);;
         }
 
         public IEnumerable<ProgrammerSkill> GetAll()

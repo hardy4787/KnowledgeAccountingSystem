@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-    public class EducationRepository : IRepository<Education>
+    public class EducationRepository : IRepository<Education, int>
     {
         private KnowledgeAccountingContext db;
         public EducationRepository(KnowledgeAccountingContext context)

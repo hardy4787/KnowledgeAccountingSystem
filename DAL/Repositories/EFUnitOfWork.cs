@@ -15,12 +15,12 @@ namespace DAL.Repositories
     {
         private KnowledgeAccountingContext db;
 
-        private IClientManager programmerManager;
+        private ProgrammerProfileRepository programmerProfileRepository;
         private SkillRepository skillRepository;
         private ProjectRepository projectRepository;
         private EducationRepository educationRepository;
         private ProgrammerSkillRepository programmerSkillRepository;
-        private PerformedTaskRepository performedTaskRepository;
+        //private PerformedTaskRepository performedTaskRepository;
 
         private ApplicationUserManager userManager;
         private ApplicationRoleManager roleManager;
@@ -53,16 +53,16 @@ namespace DAL.Repositories
         {
             await db.SaveChangesAsync();
         }
-        public IClientManager ProgrammerProfiles
+        public IRepository<ProgrammerProfile, string> ProgrammerProfiles
         {
             get
             {
-                if (programmerManager == null)
-                    programmerManager = new ProgrammerManager(db);
-                return programmerManager;
+                if (programmerProfileRepository == null)
+                    programmerProfileRepository = new ProgrammerProfileRepository(db);
+                return programmerProfileRepository;
             }
         }
-        public IRepository<ProgrammerSkill> ProgrammerSkills
+        public IProgrammerSkillRepository ProgrammerSkills
         {
             get
             {
@@ -72,7 +72,7 @@ namespace DAL.Repositories
             }
         }
 
-        public IRepository<Skill> Skills
+        public IRepository<Skill, int> Skills
         {
             get
             {
@@ -81,16 +81,16 @@ namespace DAL.Repositories
                 return skillRepository;
             }
         }
-        public IRepository<PerformedTask> PerformedTasks
-        {
-            get
-            {
-                if (performedTaskRepository == null)
-                    performedTaskRepository = new PerformedTaskRepository(db);
-                return performedTaskRepository;
-            }
-        }
-        public IRepository<Project> Projects
+        //public IRepository<PerformedTask> PerformedTasks
+        //{
+        //    get
+        //    {
+        //        if (performedTaskRepository == null)
+        //            performedTaskRepository = new PerformedTaskRepository(db);
+        //        return performedTaskRepository;
+        //    }
+        //}
+        public IRepository<Project, int> Projects
         {
             get
             {
@@ -100,7 +100,7 @@ namespace DAL.Repositories
             }
         }
 
-        public IRepository<Education> Educations
+        public IRepository<Education, int> Educations
         {
             get
             {

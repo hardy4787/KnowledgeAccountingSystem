@@ -39,7 +39,6 @@ namespace UIWebApi.Controllers
         [Route("Register")]
         public async Task<IHttpActionResult> Register(RegisterModel model)
         {
-            //await SetInitialDataAsync();
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -76,17 +75,6 @@ namespace UIWebApi.Controllers
             }
 
             return null;
-        }
-        private async Task SetInitialDataAsync()
-        {
-            await UserService.SetInitialData(new UserDTO
-            {
-                Email = "somemail@mail.ru",
-                UserName = "somemail@mail.ru",
-                Password = "ad46D_ewr3",
-                FullName = "Семен Семенович Горбунков",
-                Role = "admin",
-            }, new List<string> { "user", "admin" });
         }
     }
 }

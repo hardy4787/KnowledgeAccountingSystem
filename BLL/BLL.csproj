@@ -76,20 +76,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTO\EducationDTO.cs" />
-    <Compile Include="DTO\PerformedTaskDTO.cs" />
-    <Compile Include="DTO\ProgrammerDTO.cs" />
+    <Compile Include="DTO\ProgrammerProfileDTO.cs" />
     <Compile Include="DTO\ProgrammerSkillDTO.cs" />
     <Compile Include="DTO\ProjectDTO.cs" />
     <Compile Include="DTO\SkillDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="Infrastructure\OperationDetails.cs" />
     <Compile Include="Interfaces\IDefaultService.cs" />
-    <Compile Include="Interfaces\IProgrammerService.cs" />
+    <Compile Include="Interfaces\IEducationService.cs" />
+    <Compile Include="Interfaces\IManagerService.cs" />
+    <Compile Include="Interfaces\IProgrammerProfileService.cs" />
+    <Compile Include="Interfaces\IProjectService.cs" />
     <Compile Include="Interfaces\IServiceCreator.cs" />
+    <Compile Include="Interfaces\ISkillService.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\ProgrammerService.cs" />
+    <Compile Include="Services\EducationService.cs" />
+    <Compile Include="Services\ManagerService.cs" />
+    <Compile Include="Services\ProgrammerProfileService.cs" />
+    <Compile Include="Services\ProjectService.cs" />
     <Compile Include="Services\ServiceCreator.cs" />
+    <Compile Include="Services\SkillService.cs" />
     <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup />

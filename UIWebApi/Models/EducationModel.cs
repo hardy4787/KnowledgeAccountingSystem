@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
-namespace BLL.DTO
+namespace UIWebApi.Models
 {
-    public class EducationDTO
+    public class EducationModel
     {
         public int Id { get; set; }
         public string Level { get; set; }

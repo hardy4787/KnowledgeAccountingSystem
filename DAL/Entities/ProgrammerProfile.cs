@@ -17,6 +17,7 @@ namespace DAL.Entities
         public string Phone { get; set; }
         public string GitHub { get; set; }
         public string Address { get; set; }
+        public string ImageProfileUrl { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual ICollection<ProgrammerSkill> ProgrammerSkills { get; set; }
         public virtual ICollection<Education> Educations { get; set; }

@@ -8,16 +8,16 @@ namespace DAL.Entities
 {
     public class Project
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
-        public DateTime EntryDate { get; set; }
-        public DateTime CloseDate { get; set; }
+        public string ReferenceToTheProject { get; set; }
+        public string DescriptionOfTasks { get; set; }
         public string ProgrammerId { get; set; }
         public virtual ProgrammerProfile Programmer { get; set; }
-        public virtual ICollection<PerformedTask> PerformedTasks { get; set; }
-        public Project()
-        {
-            PerformedTasks = new List<PerformedTask>();
-        }
+        //public virtual ICollection<PerformedTask> PerformedTasks { get; set; }
+        //public Project()
+        //{
+        //    PerformedTasks = new List<PerformedTask>();
+        //}
     }
 }

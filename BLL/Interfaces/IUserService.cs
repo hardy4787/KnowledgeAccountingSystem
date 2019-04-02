@@ -14,8 +14,6 @@ namespace BLL.Interfaces
     {
         Task<OperationDetails> Create(UserDTO userDto);
         Task<IdentityUser> FindUser(string userName, string password);
-        //Task<ClaimsIdentity> Authenticate(string userName, string password);
-        
-        Task SetInitialData(UserDTO adminDto, List<string> roles);
+        IList<string> GetRolesByUserId(string id);
     }
 }
