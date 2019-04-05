@@ -54,6 +54,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configurations\EducationConfiguration.cs" />
+    <Compile Include="Configurations\ProjectConfiguration.cs" />
+    <Compile Include="Configurations\ProgrammerSkillConfiguration.cs" />
+    <Compile Include="Configurations\ProfileConfiguration.cs" />
+    <Compile Include="Configurations\WorkExperienceConfiguration.cs" />
     <Compile Include="EF\KnowledgeAccountingContext.cs" />
     <Compile Include="EF\MigrationsContextFactory.cs" />
     <Compile Include="Entities\ApplicationRole.cs" />
@@ -72,11 +77,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\EducationRepository.cs" />
     <Compile Include="Repositories\EFUnitOfWork.cs" />
-    <Compile Include="Repositories\PerformedTaskRepository.cs" />
     <Compile Include="Repositories\ProgrammerProfileRepository.cs" />
     <Compile Include="Repositories\ProgrammerSkillRepository.cs" />
     <Compile Include="Repositories\ProjectRepository.cs" />
     <Compile Include="Repositories\SkillRepository.cs" />
+    <Compile Include="Repositories\WorkExperienceRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

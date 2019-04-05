@@ -11,12 +11,10 @@ namespace DAL.Entities
     public class ProgrammerSkill
     {
 
-        [Key, Column(Order = 0)]
         public string ProgrammerId { get; set; }
-        [Key, Column(Order = 1)]
         public int SkillId { get; set; }
 
-        public virtual ProgrammerProfile Programmer { get; set; }
+        public virtual ProgrammerProfile ProgrammerProfile { get; set; }
         public virtual Skill Skill { get; set; }
 
         public int KnowledgeLevel { get; set; }

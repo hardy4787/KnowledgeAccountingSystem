@@ -13,16 +13,16 @@ namespace UIWebApi.Providers
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
             var userService = context.OwinContext.GetUserManager<IUserService>();
-            var user = await userService.FindUser(context.UserName, context.Password);
+            var user = await userService.FindUserAsync(context.UserName, context.Password);
             if (user == null)
             {
-                context.SetError("invalid_grant", "The user name or password is incorrect.");
+                context.SetError("invalid_grant", "Invalid username or password.");
                 return;
             }
             var userRoles = userService.GetRolesByUserId(user.Id);
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
-            //identity.AddClaim(new Claim("sub", context.UserName));
-            foreach(string roleName in userRoles)
+            identity.AddClaim(new Claim("Id", user.Id));
+            foreach (string roleName in userRoles)
             {
                 identity.AddClaim(new Claim(ClaimTypes.Role, roleName));
             }

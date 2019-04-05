@@ -20,7 +20,7 @@ namespace DAL.Repositories
         private ProjectRepository projectRepository;
         private EducationRepository educationRepository;
         private ProgrammerSkillRepository programmerSkillRepository;
-        //private PerformedTaskRepository performedTaskRepository;
+        private WorkExperienceRepository workExperienceRepository;
 
         private ApplicationUserManager userManager;
         private ApplicationRoleManager roleManager;
@@ -60,6 +60,15 @@ namespace DAL.Repositories
                 if (programmerProfileRepository == null)
                     programmerProfileRepository = new ProgrammerProfileRepository(db);
                 return programmerProfileRepository;
+            }
+        }
+        public IRepository<WorkExperience, int> WorkExperiences
+        {
+            get
+            {
+                if (workExperienceRepository == null)
+                    workExperienceRepository = new WorkExperienceRepository(db);
+                return workExperienceRepository;
             }
         }
         public IProgrammerSkillRepository ProgrammerSkills

@@ -9,11 +9,11 @@ namespace BLL.Interfaces
 {
     public interface IProgrammerProfileService
     {
-        //IEnumerable<ProgrammerDTO> GetBySkill(int id);
         IEnumerable<ProgrammerProfileDTO> GetAll();
         ProgrammerProfileDTO Get(string id);
         void Update(ProgrammerProfileDTO item);
         void UpdateImageProfileUrl(string url, string id);
+        void DeleteOldImageProfile(string id);
 
     }
 }

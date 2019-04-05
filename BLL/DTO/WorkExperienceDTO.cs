@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Entities
+namespace BLL.DTO
 {
-    public class Education
+    public class WorkExperienceDTO
     {
         public int Id { get; set; }
-        public string Level { get; set; }
-        public string NameInstitution { get; set; }
-        public DateTime EntryDate { get; set; }
+        public string Company { get; set; }
+        public string Position { get; set; }
+        public DateTime? EntryDate { get; set; }
         public DateTime? CloseDate { get; set; }
+        public string Description { get; set; }
         public string ProgrammerId { get; set; }
-        public virtual ProgrammerProfile ProgrammerProfile { get; set; }
     }
 }

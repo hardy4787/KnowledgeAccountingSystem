@@ -20,24 +20,24 @@ namespace DAL.Repositories
         }
         public void Delete(string id)
         {
-            ProgrammerProfile programmer = db.Programmers.Find(id);
+            ProgrammerProfile programmer = db.ProgrammerProfiles.Find(id);
             if (programmer != null)
-                db.Programmers.Remove(programmer);
+                db.ProgrammerProfiles.Remove(programmer);
         }
 
         public ProgrammerProfile Get(string id)
         {
-            return db.Programmers.Find(id);
+            return db.ProgrammerProfiles.Find(id);
         }
 
         public IEnumerable<ProgrammerProfile> GetAll()
         {
-            return db.Programmers;
+            return db.ProgrammerProfiles;
         }
 
         public void Insert(ProgrammerProfile programmer)
         {
-            db.Programmers.Add(programmer);
+            db.ProgrammerProfiles.Add(programmer);
         }
 
         public void Update(ProgrammerProfile programmer)

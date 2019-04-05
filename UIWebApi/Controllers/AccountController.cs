@@ -31,13 +31,10 @@ namespace UIWebApi.Controllers
             }
         }
 
-
-
-
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("Register")]
-        public async Task<IHttpActionResult> Register(RegisterModel model)
+        public async Task<IHttpActionResult> Register([FromBody]RegisterModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -49,32 +46,44 @@ namespace UIWebApi.Controllers
                 Email = model.Email,
                 Password = model.Password,
                 UserName = model.UserName,
+                FullName = model.FullName,
                 Role = "user"
             };
-            OperationDetails operationDetails = await UserService.Create(userDto);
-            if (!operationDetails.Succedeed)
-                return GetErrorResult(operationDetails);
-            return Ok();
-        }
-        private IHttpActionResult GetErrorResult(OperationDetails result)
-        {
-            if (result == null)
+            OperationDetails operationDetails = await UserService.CreateUserAsync(userDto);
+            if (!operationDetails.Succeeded)
             {
-                return InternalServerError();
-            }
-
-            if (!result.Succedeed)
-            {
-                ModelState.AddModelError(result.Property, result.Message);
-
-                if (ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
+                ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
                 return BadRequest(ModelState);
             }
-
-            return null;
+            return Ok(operationDetails);
         }
+        [HttpDelete]
+        [Route("{userId}")]
+        public async Task<IHttpActionResult> DeleteUser([FromUri] string userId)
+        {
+            OperationDetails operationDetails = await UserService.DeleteUser(userId);
+            if (operationDetails.Succeeded) return Ok();
+            else return BadRequest(operationDetails.Message);
+        }
+        //private IHttpActionResult GetErrorResult(OperationDetails result)
+        //{
+        //    if (result == null)
+        //    {
+        //        return InternalServerError();
+        //    }
+
+        //    if (!result.Succedeed)
+        //    {
+        //        ModelState.AddModelError(result.Property, result.Message);
+
+        //        if (ModelState.IsValid)
+        //        {
+        //            return BadRequest();
+        //        }
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    return null;
+        //}
     }
 }

@@ -14,6 +14,7 @@ namespace Util
         {
             CreateMap<ProgrammerProfileDTO, ProgrammerProfile>().ReverseMap();
             CreateMap<ProgrammerSkillDTO, ProgrammerSkill>().ReverseMap();
+            CreateMap<WorkExperienceDTO, WorkExperience>().ReverseMap();
             CreateMap<SkillDTO, Skill>().ReverseMap();
             CreateMap<ProjectDTO, Project>().ReverseMap();
             CreateMap<EducationDTO, Education>().ReverseMap();

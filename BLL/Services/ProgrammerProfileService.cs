@@ -5,6 +5,7 @@ using DAL.Entities;
 using DAL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace BLL.Services
@@ -27,7 +28,7 @@ namespace BLL.Services
         {
 
             var kek = Database.ProgrammerSkills.GetAll().Where(x => x.SkillId == id).ToList();
-            var programmers = kek.Select(y => y.Programmer);
+            var programmers = kek.Select(y => y.ProgrammerProfile);
 
             return Mapper.Map<IEnumerable<ProgrammerProfile>, IEnumerable<ProgrammerProfileDTO>>(programmers);
         }
@@ -49,6 +50,13 @@ namespace BLL.Services
             var programmer = Database.ProgrammerProfiles.Get(id);
             programmer.ImageProfileUrl = url;
             Database.Save();
+        }
+        public void DeleteOldImageProfile(string id)
+        {
+            var programmer = Database.ProgrammerProfiles.Get(id);
+            string sourceDir = "C:/Users/BogdanHristich/source/repos/KnowledgeAccountingSystem/Angular/src";
+            if (File.Exists(sourceDir + programmer.ImageProfileUrl))
+                File.Delete(sourceDir + programmer.ImageProfileUrl);
         }
 
     }

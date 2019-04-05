@@ -9,7 +9,6 @@ namespace BLL.Interfaces
 {
     public interface IEducationService
     {
-
         IEnumerable<EducationDTO> GetEducationByProfileId(string id);
         EducationDTO Get(int id);
         void Insert(EducationDTO education);

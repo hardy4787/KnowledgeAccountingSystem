@@ -81,8 +81,8 @@
     <Compile Include="DTO\ProjectDTO.cs" />
     <Compile Include="DTO\SkillDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
+    <Compile Include="DTO\WorkExperienceDTO.cs" />
     <Compile Include="Infrastructure\OperationDetails.cs" />
-    <Compile Include="Interfaces\IDefaultService.cs" />
     <Compile Include="Interfaces\IEducationService.cs" />
     <Compile Include="Interfaces\IManagerService.cs" />
     <Compile Include="Interfaces\IProgrammerProfileService.cs" />
@@ -90,6 +90,7 @@
     <Compile Include="Interfaces\IServiceCreator.cs" />
     <Compile Include="Interfaces\ISkillService.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
+    <Compile Include="Interfaces\IWorkExperienceService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\EducationService.cs" />
     <Compile Include="Services\ManagerService.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Services\ServiceCreator.cs" />
     <Compile Include="Services\SkillService.cs" />
     <Compile Include="Services\UserService.cs" />
+    <Compile Include="Services\WorkExperience.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

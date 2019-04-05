@@ -13,7 +13,7 @@ namespace DAL.Interfaces
         IRepository<ProgrammerProfile, string> ProgrammerProfiles { get; }
         IRepository<Skill, int> Skills { get; }
         IRepository<Education, int> Educations { get; }
-        //IRepository<PerformedTask> PerformedTasks { get; }
+        IRepository<WorkExperience, int> WorkExperiences { get; }
         IRepository<Project, int> Projects { get; }
         IProgrammerSkillRepository ProgrammerSkills { get; }
         void Save();

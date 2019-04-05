@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
-namespace DAL.Entities
+namespace UIWebApi.Models
 {
-    public class WorkExperience
+    public class WorkExperienceModel
     {
         public int Id { get; set; }
         public string Company { get; set; }
         public string Position { get; set; }
-        public DateTime EntryDate { get; set; }
+        public DateTime? EntryDate { get; set; }
         public DateTime? CloseDate { get; set; }
         public string Description { get; set; }
         public string ProgrammerId { get; set; }
-        public virtual ProgrammerProfile ProgrammerProfile { get; set; }
     }
 }
