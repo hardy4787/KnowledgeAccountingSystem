@@ -345,3 +345,6 @@ healthchecksdb
 /DAL/Identity/ApplicationRoleManager.cs
 /DAL/Identity/ApplicationUserManager.cs
 /DAL/Interfaces/IClientManager.cs
+
+KnowledgeAccountingSystem.sln
+UI(WebApi)
