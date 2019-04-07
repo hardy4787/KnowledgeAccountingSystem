@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BLL.Infrastructure
 {
-    public class OperationDetails
+    public class IdentityOperations
     {
-        public OperationDetails(bool succeeded, string message, string prop)
+        public IdentityOperations(bool succeeded, string message, string prop)
         {
             Succeeded = succeeded;
             Message = message;

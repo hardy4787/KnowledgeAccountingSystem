@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL.DTO;
+using BLL.Infrastructure;
 using BLL.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -16,39 +17,76 @@ namespace UIWebApi.Controllers
     [RoutePrefix("api/profile")]
     public class EducationController : ApiController
     {
-        private IEducationService _educationService;
+        private readonly IEducationService _educationService;
 
         public EducationController(IEducationService educationService)
         {
             _educationService = educationService;
         }
 
+        [HttpGet]
         [Route("{id}/education")]
-        public IEnumerable<EducationModel> Get(string id)
+        public IHttpActionResult GetByProfileId(string id)
         {
-            return Mapper.Map<IEnumerable<EducationDTO>, IEnumerable<EducationModel>>(_educationService.GetEducationByProfileId(id));
-        }
-
-        [Route("{id}/education")]
-        public void Post([FromBody]EducationModel education)
-        {
-            _educationService.Insert(Mapper.Map<EducationModel, EducationDTO>(education));
-        }
-
-        [Route("{id}/education/{educationId}")]
-        public void Put(int educationId, [FromBody]EducationModel education)
-        {
-            if (educationId == education.Id)
+            IEnumerable<EducationModel> education;
+            try
             {
-                _educationService.Update(Mapper.Map<EducationModel, EducationDTO>(education));
+                education = Mapper.Map<IEnumerable<EducationDTO>, IEnumerable<EducationModel>>(_educationService.GetEducationByProfileId(id));
             }
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelError(ex.Property, ex.Message);
+                return BadRequest(ModelState);
+            }
+            return Ok(education);
         }
 
+        [HttpPost]
+        [Route("{id}/education")]
+        public IHttpActionResult AddEducationProgrammer([FromBody]EducationModel education)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            _educationService.Insert(Mapper.Map<EducationModel, EducationDTO>(education));
+            return Ok(new { Message = "Education added successfully!" });
+        }
 
         [Route("{id}/education/{educationId}")]
-        public void Delete(int educationId)
+        [HttpPut]
+        public IHttpActionResult UpdateEducationProgrammer(int educationId, [FromBody]EducationModel education)
         {
-            _educationService.Delete(educationId);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                _educationService.Update(educationId, Mapper.Map<EducationModel, EducationDTO>(education));
+            }
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelError(ex.Property, ex.Message);
+                return BadRequest(ModelState);
+            }
+            return Ok(new { Message = "Education updated successfully!" });
+        }
+
+        [HttpDelete]
+        [Route("{id}/education/{educationId}")]
+        public IHttpActionResult Delete(int educationId)
+        {
+            try
+            {
+                _educationService.Delete(educationId);
+            }
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelError(ex.Property, ex.Message);
+                return BadRequest(ModelState);
+            }
+            return Ok(new { Message = "Education deleted successfully!" });
         }
     }
 }

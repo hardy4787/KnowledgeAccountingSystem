@@ -9,10 +9,9 @@ namespace BLL.Interfaces
 {
     public interface IProjectService
     {
-        IEnumerable<ProjectDTO> GetProjectByProfileId(string id);
-        ProjectDTO Get(int id);
+        IEnumerable<ProjectDTO> GetProjectsByProfileId(string id);
         void Insert(ProjectDTO education);
-        void Update(ProjectDTO education);
+        void Update(int id, ProjectDTO education);
         void Delete(int id);
     }
 }

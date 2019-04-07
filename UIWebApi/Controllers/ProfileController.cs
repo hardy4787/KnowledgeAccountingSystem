@@ -19,7 +19,7 @@ namespace UIWebApi.Controllers
     [RoutePrefix("api/profile")]
     public class ProfileController : ApiController
     {
-        private IProgrammerProfileService _profileService;
+        private readonly IProgrammerProfileService _profileService;
 
         public ProfileController(IProgrammerProfileService profileService)
         {

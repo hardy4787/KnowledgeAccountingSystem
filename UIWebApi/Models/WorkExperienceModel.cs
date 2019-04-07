@@ -7,7 +7,7 @@ namespace UIWebApi.Models
 {
     public class WorkExperienceModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string Company { get; set; }
         public string Position { get; set; }
         public DateTime? EntryDate { get; set; }

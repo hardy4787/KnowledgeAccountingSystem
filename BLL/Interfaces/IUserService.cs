@@ -12,9 +12,9 @@ namespace BLL.Interfaces
 {
     public interface IUserService : IDisposable
     {
-        Task<OperationDetails> CreateUserAsync(UserDTO userDto);
+        Task<IdentityOperations> CreateUserAsync(UserDTO userDto);
         Task<IdentityUser> FindUserAsync(string userName, string password);
-        Task<OperationDetails> DeleteUser(string userId);
+        Task<IdentityOperations> DeleteUser(string userId);
         IList<string> GetRolesByUserId(string id);
     }
 }

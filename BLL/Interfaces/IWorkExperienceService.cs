@@ -10,9 +10,8 @@ namespace BLL.Interfaces
     public interface IWorkExperienceService
     {
         IEnumerable<WorkExperienceDTO> GetWorkExperienceByProfileId(string id);
-        WorkExperienceDTO Get(int id);
         void Insert(WorkExperienceDTO workExperience);
-        void Update(WorkExperienceDTO workExperience);
+        void Update(int workExperienceId, WorkExperienceDTO workExperience);
         void Delete(int id);
     }
 }

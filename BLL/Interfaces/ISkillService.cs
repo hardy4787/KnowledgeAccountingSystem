@@ -12,8 +12,11 @@ namespace BLL.Interfaces
         IEnumerable<ProgrammerSkillDTO> GetSkillsOfProgrammer(string id);
         IEnumerable<SkillDTO> GetSkillsThatTheProgrammerDoesNotHave(string id);
         void InsertSkillToProgrammer(ProgrammerSkillDTO skill);
-        void UpdateSkillOfProgrammer(ProgrammerSkillDTO skill);
+        void UpdateSkillOfProgrammer(int skillId, ProgrammerSkillDTO skill);
         void DeleteSkillOfProgrammer(string idProgrammer, int idSkill);
         IEnumerable<SkillDTO> GetSkills();
+        void Insert(SkillDTO skill);
+        void Delete(int id);
+        void Update(int skillId, SkillDTO skill);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL.DTO;
+using BLL.Infrastructure;
 using BLL.Interfaces;
 using DAL.Entities;
 using DAL.Interfaces;
@@ -20,14 +21,11 @@ namespace BLL.Services
         }
         public IEnumerable<EducationDTO> GetEducationByProfileId(string id)
         {
+            var programmer = Database.ProgrammerProfiles.Get(id);
+            if (programmer == null)
+                throw new ValidationException("Programmer has not found", "Id");
             var education = Database.Educations.GetAll().Where(x => x.ProgrammerId == id);
             return Mapper.Map<IEnumerable<Education>, IEnumerable<EducationDTO>>(education);
-        }
-
-
-        public EducationDTO Get(int id)
-        {
-            return Mapper.Map < Education, EducationDTO> (Database.Educations.Get(id));
         }
           
         public void Insert(EducationDTO education)
@@ -36,14 +34,22 @@ namespace BLL.Services
             Database.Save();
         }
 
-        public void Update(EducationDTO education)
+        public void Update(int educationId, EducationDTO educationDTO)
         {
-            Database.Educations.Update(Mapper.Map<EducationDTO, Education>(education));
+            if (educationId != educationDTO.Id)
+                throw new ValidationException("Education's id don't match", "Id");
+            var education = Database.Educations.Get(educationDTO.Id);
+            if (education == null)
+                throw new ValidationException("Education hasn't found", "Id");
+            Database.Educations.Update(Mapper.Map<EducationDTO, Education>(educationDTO));
             Database.Save();
         }
 
         public void Delete(int id)
         {
+            var education = Database.Educations.Get(id);
+            if (education == null)
+                throw new ValidationException("Education hasn't found", "Id");
             Database.Educations.Delete(id);
             Database.Save();
         }

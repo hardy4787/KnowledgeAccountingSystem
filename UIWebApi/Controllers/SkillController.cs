@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL.DTO;
+using BLL.Infrastructure;
 using BLL.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,54 +12,80 @@ using UIWebApi.Models;
 
 namespace UIWebApi.Controllers
 {
-    [Authorize]
-    [RoutePrefix("api/profile")]
+    [RoutePrefix("api/skills")]
     public class SkillController : ApiController
     {
-        private ISkillService _skillService;
+        private readonly ISkillService _skillService;
 
         public SkillController(ISkillService skillService)
         {
             _skillService = skillService;
         }
 
-        [Route("~/api/skills")]
-        public IEnumerable<SkillModel> GetSkills()
+        [Authorize]
+        [HttpGet]
+        [Route("")]
+        public IHttpActionResult GetSkills()
         {
-            return Mapper.Map<IEnumerable<SkillDTO>, IEnumerable<SkillModel>>(_skillService.GetSkills());
+            var skills = Mapper.Map<IEnumerable<SkillDTO>, IEnumerable<SkillModel>>(_skillService.GetSkills());
+            return Ok(skills);
         }
-
-        [Route("{id}/skills")]
-        public IEnumerable<ProgrammerSkillModel> Get(string id)
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        [Route("")]
+        public IHttpActionResult CreateSkill([FromBody]SkillModel skill)
         {
-            return Mapper.Map<IEnumerable<ProgrammerSkillDTO>, IEnumerable<ProgrammerSkillModel>>(_skillService.GetSkillsOfProgrammer(id));
-        }
-
-        [Route("~/api/profile/{id}/untouched-skills")]
-        public IEnumerable<SkillModel> GetUntouchedSkills(string id)
-        {
-            return Mapper.Map<IEnumerable<SkillDTO>, IEnumerable<SkillModel>>(_skillService.GetSkillsThatTheProgrammerDoesNotHave(id));
-        }
-
-        [Route("{id}/skills")]
-        public void Post([FromBody]ProgrammerSkillModel programmerSkill)
-        {
-            _skillService.InsertSkillToProgrammer(Mapper.Map<ProgrammerSkillModel, ProgrammerSkillDTO>(programmerSkill));
-        }
-
-        [Route("{id}/skills/{skillId}")]
-        public void Put(int skillId, [FromBody]ProgrammerSkillModel programmerSkill)
-        {
-            if (skillId == programmerSkill.SkillId)
+            if (!ModelState.IsValid)
             {
-                _skillService.UpdateSkillOfProgrammer(Mapper.Map<ProgrammerSkillModel, ProgrammerSkillDTO>(programmerSkill));
+                return BadRequest(ModelState);
             }
+            try
+            {
+                _skillService.Insert(Mapper.Map<SkillModel, SkillDTO>(skill));
+            }
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelError(ex.Property, ex.Message);
+                return BadRequest(ModelState);
+            }
+            return Ok(new { Message = "Skill created successfully!" });
         }
 
-        [Route("{id}/skills/{skillId}")]
-        public void Delete(string id, int skillId)
+        [Authorize(Roles = "admin")]
+        [HttpDelete]
+        [Route("{skillId:int}")]
+        public IHttpActionResult DeleteSkill(int skillId)
         {
-            _skillService.DeleteSkillOfProgrammer(id, skillId);
+            try
+            {
+                _skillService.Delete(skillId);
+            }
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelError(ex.Property, ex.Message);
+                return BadRequest(ModelState);
+            }
+            return Ok(new { Message = "Skill deleted successfully!" });
+        }
+        [Authorize(Roles = "admin")]
+        [HttpPut]
+        [Route("{skillId:int}")]
+        public IHttpActionResult UpdateSkill(int skillId, [FromBody]SkillModel skill)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                _skillService.Update(skillId, Mapper.Map<SkillModel, SkillDTO>(skill));
+            }
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelError(ex.Property, ex.Message);
+                return BadRequest(ModelState);
+            }
+            return Ok(new { message = "Skill changed successfully" });
         }
     }
 }

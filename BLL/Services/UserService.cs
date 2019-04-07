@@ -24,7 +24,7 @@ namespace BLL.Services
             Database = uow;
         }
 
-        public async Task<OperationDetails> CreateUserAsync(UserDTO userDto)
+        public async Task<IdentityOperations> CreateUserAsync(UserDTO userDto)
         {
             var user = await Database.UserManager.FindByEmailAsync(userDto.Email);
             if (user == null)
@@ -32,18 +32,16 @@ namespace BLL.Services
                 user = new ApplicationUser { Email = userDto.Email, UserName = userDto.UserName };
                 IdentityResult result = await Database.UserManager.CreateAsync(user, userDto.Password);
                 if (result.Errors.Count() > 0)
-                    return new OperationDetails(false, result.Errors.FirstOrDefault(), "");
-                // добавляем роль
+                    return new IdentityOperations(false, result.Errors.FirstOrDefault(), "");
                 await Database.UserManager.AddToRoleAsync(user.Id, userDto.Role);
-                // создаем профиль клиента
                 ProgrammerProfile programmerProfile = new ProgrammerProfile { Id = user.Id, Email = user.Email, FullName = userDto.FullName };
                 Database.ProgrammerProfiles.Insert(programmerProfile);
                 await Database.SaveAsync();
-                return new OperationDetails(true, "Registration successfully completed", "");
+                return new IdentityOperations(true, "Registration successfully completed", "");
             }
             else
             {
-                return new OperationDetails(false, "User with this email already exists", "Email");
+                return new IdentityOperations(false, "User with this email already exists", "Email");
             }
         }
 
@@ -59,7 +57,7 @@ namespace BLL.Services
             return user;
         }
 
-        public async Task<OperationDetails> DeleteUser(string userId)
+        public async Task<IdentityOperations> DeleteUser(string userId)
         {
             ApplicationUser user = await Database.UserManager.FindByIdAsync(userId);
             if (user != null)
@@ -76,17 +74,16 @@ namespace BLL.Services
                 {
                     foreach (var item in rolesForUser.ToList())
                     {
-                        // item should be the name of the role
                         var result = await Database.UserManager.RemoveFromRoleAsync(user.Id, item);
                     }
                 }
 
                 await Database.UserManager.DeleteAsync(user);
                 await Database.SaveAsync();
-                return new OperationDetails(true, "User successfully deleted", "user");
+                return new IdentityOperations(true, "User successfully deleted", "user");
             }
             else
-                return new OperationDetails(false, "User is not found", "user");
+                return new IdentityOperations(false, "User is not found", "user");
         }
 
         public void Dispose()

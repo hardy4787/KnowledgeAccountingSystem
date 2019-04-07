@@ -7,7 +7,7 @@ namespace UIWebApi.Models
 {
     public class ProjectModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string Name { get; set; }
         public string ReferenceToTheProject { get; set; }
         public string DescriptionOfTasks { get; set; }

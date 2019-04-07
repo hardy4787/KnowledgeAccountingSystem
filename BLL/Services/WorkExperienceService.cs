@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL.DTO;
+using BLL.Infrastructure;
 using BLL.Interfaces;
 using DAL.Entities;
 using DAL.Interfaces;
@@ -20,17 +21,18 @@ namespace BLL.Services
         }
         public void Delete(int id)
         {
+            var workExperience = Database.WorkExperiences.Get(id);
+            if (workExperience == null)
+                throw new ValidationException("Work experience hasn't found", "Id");
             Database.WorkExperiences.Delete(id);
             Database.Save();
         }
 
-        public WorkExperienceDTO Get(int id)
-        {
-            return Mapper.Map<WorkExperience, WorkExperienceDTO>(Database.WorkExperiences.Get(id));
-        }
-
         public IEnumerable<WorkExperienceDTO> GetWorkExperienceByProfileId(string id)
         {
+            var programmer = Database.ProgrammerProfiles.Get(id);
+            if (programmer == null)
+                throw new ValidationException("Programmer has not found", "Id");
             var workExperience = Database.WorkExperiences.GetAll().Where(x => x.ProgrammerId == id);
             return Mapper.Map<IEnumerable<WorkExperience>, IEnumerable<WorkExperienceDTO>>(workExperience);
         }
@@ -41,9 +43,14 @@ namespace BLL.Services
             Database.Save();
         }
 
-        public void Update(WorkExperienceDTO workExperience)
+        public void Update(int workExperienceId, WorkExperienceDTO workExperienceDTO)
         {
-            Database.WorkExperiences.Update(Mapper.Map<WorkExperienceDTO, WorkExperience>(workExperience));
+            if (workExperienceId != workExperienceDTO.Id)
+                throw new ValidationException("Skill's id don't match", "Id");
+            var workExperience = Database.WorkExperiences.Get(workExperienceDTO.Id);
+            if (workExperience == null)
+                throw new ValidationException("Work experience hasn't found", "Id");
+            Database.WorkExperiences.Update(Mapper.Map<WorkExperienceDTO, WorkExperience>(workExperienceDTO));
             Database.Save();
         }
     }

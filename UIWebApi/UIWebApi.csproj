@@ -165,6 +165,7 @@
     <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\ProgrammerSkillController.cs" />
     <Compile Include="Controllers\SkillController.cs" />
     <Compile Include="Controllers\WorkExperienceController.cs" />
     <Compile Include="Global.asax.cs">

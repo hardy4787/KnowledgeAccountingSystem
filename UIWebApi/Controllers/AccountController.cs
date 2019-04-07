@@ -49,7 +49,7 @@ namespace UIWebApi.Controllers
                 FullName = model.FullName,
                 Role = "user"
             };
-            OperationDetails operationDetails = await UserService.CreateUserAsync(userDto);
+            IdentityOperations operationDetails = await UserService.CreateUserAsync(userDto);
             if (!operationDetails.Succeeded)
             {
                 ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
@@ -61,7 +61,7 @@ namespace UIWebApi.Controllers
         [Route("{userId}")]
         public async Task<IHttpActionResult> DeleteUser([FromUri] string userId)
         {
-            OperationDetails operationDetails = await UserService.DeleteUser(userId);
+            IdentityOperations operationDetails = await UserService.DeleteUser(userId);
             if (operationDetails.Succeeded) return Ok();
             else return BadRequest(operationDetails.Message);
         }

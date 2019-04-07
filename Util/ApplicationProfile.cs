@@ -18,6 +18,7 @@ namespace Util
             CreateMap<SkillDTO, Skill>().ReverseMap();
             CreateMap<ProjectDTO, Project>().ReverseMap();
             CreateMap<EducationDTO, Education>().ReverseMap();
+            CreateMap<SkillDTO, Skill>().ReverseMap();
         }
     }
 }

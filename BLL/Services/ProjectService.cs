@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL.DTO;
+using BLL.Infrastructure;
 using BLL.Interfaces;
 using DAL.Entities;
 using DAL.Interfaces;
@@ -13,21 +14,18 @@ namespace BLL.Services
 {
     public class ProjectService : IProjectService
     {
-        IUnitOfWork Database { get; set; }
+        private IUnitOfWork Database { get; set; }
         public ProjectService(IUnitOfWork uow)
         {
             Database = uow;
         }
-        public IEnumerable<ProjectDTO> GetProjectByProfileId(string id)
+        public IEnumerable<ProjectDTO> GetProjectsByProfileId(string id)
         {
+            var programmer = Database.ProgrammerProfiles.Get(id);
+            if (programmer == null)
+                throw new ValidationException("Programmer has not found", "Id");
             var project = Database.Projects.GetAll().Where(x => x.ProgrammerId == id);
             return Mapper.Map<IEnumerable<Project>, IEnumerable<ProjectDTO>>(project);
-        }
-
-
-        public ProjectDTO Get(int id)
-        {
-            return Mapper.Map<Project, ProjectDTO>(Database.Projects.Get(id));
         }
 
         public void Insert(ProjectDTO project)
@@ -36,14 +34,21 @@ namespace BLL.Services
             Database.Save();
         }
 
-        public void Update(ProjectDTO project)
+        public void Update(int projectId, ProjectDTO projectDTO)
         {
-            Database.Projects.Update(Mapper.Map<ProjectDTO, Project>(project));
+            if (projectId != projectDTO.Id)
+                throw new ValidationException("Project's id don't match", "Id");
+            var project = Database.Skills.Get(projectDTO.Id);
+            if (project == null)
+                Database.Projects.Update(Mapper.Map<ProjectDTO, Project>(projectDTO));
             Database.Save();
         }
 
         public void Delete(int id)
         {
+            var project = Database.Projects.Get(id);
+            if (project == null)
+                throw new ValidationException("This project has not found", "Id");
             Database.Projects.Delete(id);
             Database.Save();
         }
