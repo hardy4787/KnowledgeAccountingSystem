@@ -1,0 +1,64 @@
+<div class="top-wrap-btn text-right">
+  <button type="button" (click)="resetForm(educationForm); skillModal.show()" class="btn btn-sm btn-outline-success">Add</button>
+</div>
+<div *ngIf="service.fullSkillList.length==0" class="text-center font-italic card ml-5 mr-5">
+  <div class="card-body">
+    <p>No information about skills.</p>
+  </div>
+</div>
+<div class="card ml-5 mr-5 mt-3" *ngFor="let skill of service.fullSkillList">
+  <div class="card-body">
+    <table class="table table-hover table-block-info">
+
+      <h5 class="card-title">{{skill.Name}}</h5>
+      <tr>
+        <td>Description</td>
+        <td>{{skill.Description}}</td>
+      </tr>
+      <tr class="footer-row">
+        <tfoot class="text-center">
+          <td><button (click)="onDelete(skill.Id)" class="btn btn-sm btn-outline-danger">Delete</button></td>
+          <td><button (click)="populateForm(skill); skillModal.show()" data-toggle="modal" data-target="#skillModal"
+              class="btn btn-sm btn-outline-warning">Edit</button></td>
+        </tfoot>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="modal fade" bsModal #skillModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="skillModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="skillModal">Skill</h5>
+        <button class="close" type="button" (click)="skillModal.hide();" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <form class="col-sm-12" #skillForm="ngForm" autocomplete="off" (ngSubmit)="onSubmit(skillForm)">
+            <input type="hidden" name="Id" #Id="ngModel" [(ngModel)]="service.formData.Id">
+            <div class="form-group">
+              <label>Name of the skill</label>
+              <input type="text" class="form-control" max-length="64" name="Name" #Name="ngModel"
+                [(ngModel)]="service.formData.Name" required>
+              <div class="validation-error" *ngIf="Name.invalid && Name.touched">This field is
+                required</div>
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <input type="text" class="form-control" maxlength="128" name="Description" #Description="ngModel"
+                [(ngModel)]="service.formData.Description" required>
+              <div class="validation-error" *ngIf="Description.invalid && Description.touched">This
+                field is
+                required</div>
+            </div>
+            <div class="modal-footer">
+              <button [disabled]="!skillForm.valid" type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

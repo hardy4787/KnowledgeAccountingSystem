@@ -1,0 +1,49 @@
+<div class="d-flex" id="wrapper">
+  <div class="bg-dark" id="sidebar-wrapper" *ngIf="isOpened">
+    <div class="list-group list-group-flush">
+      <div *ngIf="isMainMenuOpened" class="">
+        <a [routerLink]="['/profile', id]" class="list-group-item list-group-item-action bg-dark text-light">Main
+          information</a>
+        <a [routerLink]="['/profile', id, 'education']"
+          class="list-group-item list-group-item-action bg-dark text-light">Education</a>
+        <a [routerLink]="['/profile', id, 'work-experience']"
+          class="list-group-item list-group-item-action bg-dark text-light">Work Experience</a>
+        <a [routerLink]="['/profile', id, 'projects']"
+          class="list-group-item list-group-item-action bg-dark text-light">Projects</a>
+        <a [routerLink]="['/profile', id, 'skills']"
+          class="list-group-item list-group-item-action bg-dark text-light">Skills</a>
+        <a [hidden]="service.userMatch()" class="list-group-item list-group-item-action bg-dark text-light"
+          (click)="isMainMenuOpened=false">Global settings</a>
+      </div>
+      <div *ngIf="!isMainMenuOpened">
+        <a class="list-group-item pointer list-group-item-action bg-dark text-light" (click)="isMainMenuOpened=true">
+          <i class="material-icons">
+            keyboard_backspace
+          </i></a>
+        <a class="list-group-item pointer list-group-item-action bg-dark text-light" (click)="deleteUser()">Delete
+          profile</a>
+      </div>
+    </div>
+  </div>
+  <div id="page-content-wrapper">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom ">
+      <button class="btn btn-primary" (click)="toggleMenu()">Menu</button>
+
+      <button class="navbar-toggler" type="button" (click)="isCollapsed = !isCollapsed" aria-expanded="false"><span
+          class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" [collapse]="isCollapsed">
+        <ul class="nav navbar-nav ml-auto mt-2 mt-lg-0">
+          <li *ngIf="service.roleMatch(['admin'])" class="nav-item">
+            <a routerLink="/manager/profiles" class="nav-link">Back to admin panel<span class="sr-only"></span></a>
+          </li>
+          <li class="nav-item">
+            <a (click)="LogOut()" class="nav-link pointer">Logout<span class="sr-only"></span></a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <router-outlet></router-outlet>
+  </div>
+</div>

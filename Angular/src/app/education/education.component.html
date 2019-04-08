@@ -1,0 +1,108 @@
+<div class="top-wrap-btn text-right">
+  <button type="button" (click)="resetForm(educationForm); educationModal.show()" class="btn btn-sm btn-outline-success"
+    [hidden]="roleService.userMatch()">Add</button>
+</div>
+<div *ngIf="service.educationList.length==0" class="text-center font-italic card ml-5 mr-5">
+  <div class="card-body">
+    <p>No information about education.</p>
+  </div>
+</div>
+<div class="card ml-5 mr-5" *ngFor="let education of service.educationList">
+  <div class="card-body">
+    <table class="table table-hover table-block-info">
+
+      <h5 class="card-title">{{education.NameInstitution}}</h5>
+      <tr>
+        <td>Level</td>
+        <td>{{education.Level}}</td>
+      </tr>
+      <tr>
+        <td>Date of entry</td>
+        <td>{{education.EntryDate | date:  "dd.MM.y" }}</td>
+      </tr>
+      <tr *ngIf="education.CloseDate!=null">
+        <td>Date of close</td>
+        <td>{{education.CloseDate | date:  "dd.MM.y" }}</td>
+      </tr>
+      <tr class="footer-row">
+        <tfoot class="text-center">
+          <td><button (click)="onDelete(education.Id)" [hidden]="roleService.userMatch()"
+              class="btn btn-sm btn-outline-danger">Delete</button></td>
+          <td><button (click)="populateForm(education); educationModal.show()" data-toggle="modal"
+              data-target="#educationModal" class="btn btn-sm btn-outline-warning"
+              [hidden]="roleService.userMatch()">Edit</button></td>
+        </tfoot>
+      </tr>
+
+    </table>
+  </div>
+</div>
+<div class="modal fade" bsModal #educationModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="educationModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="educationModalLabel">Education</h5>
+        <button class="close" type="button" (click)="educationModal.hide();" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <form class="col-sm-12" #educationForm="ngForm" autocomplete="off" (ngSubmit)="onSubmit(educationForm)">
+            <input type="hidden" name="Id" #Id="ngModel" [(ngModel)]="service.formData.Id">
+            <input type="hidden" name="ProgrammerId" #ProgrammerId="ngModel"
+              [(ngModel)]="service.formData.ProgrammerId">
+            <div class="form-group">
+              <label>Level</label>
+              <select class="custom-select" name="Level" #Level="ngModel" [(ngModel)]="service.formData.Level" required>
+                <option value="high">high</option>
+                <option value="full high">full high</option>
+                <option value="middle">middle</option>
+              </select>
+              <div class="validation-error" *ngIf="Level.invalid && Level.touched">This field is required</div>
+            </div>
+            <div class="form-group">
+              <label>Name of the Institution</label>
+              <input type="text" class="form-control" maxLength="64" name="NameInstitution" #NameInstitution="ngModel"
+                [(ngModel)]="service.formData.NameInstitution" required>
+              <div class="validation-error" *ngIf="NameInstitution.invalid && NameInstitution.touched">This field is
+                required</div>
+            </div>
+            <div class="form-group">
+              <label>Date of entry</label>
+              <div class="input-group">
+                <input type="text" bsDatepicker #dpEntryDate="bsDatepicker" [bsConfig]="datePickerConfig"
+                  placement="right" class="form-control" name="EntryDate" #EntryDate="ngModel" placeholder="yyyy-mm-dd"
+                  [(ngModel)]="service.formData.EntryDate" required>
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary calendar" (click)="dpEntryDate.toggle()"
+                    type="button"></button>
+                </div>
+              </div>
+              <div class="validation-error" *ngIf="EntryDate.invalid && EntryDate.touched">This field is required
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Date of close</label>
+              <div class="input-group">
+                <input type="text" bsDatepicker #dpCloseDate="bsDatepicker" [bsConfig]="datePickerConfig"
+                  placement="right" class="form-control" name="CloseDate" #CloseDate="ngModel"
+                  [(ngModel)]="service.formData.CloseDate" placeholder="yyyy-mm-dd">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary calendar" (click)="dpCloseDate.toggle()"
+                    type="button"></button>
+                </div>
+
+              </div>
+              <div class="validation-error" *ngIf="CloseDate.invalid && CloseDate.touched">This field is required
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button [disabled]="!educationForm.valid" type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

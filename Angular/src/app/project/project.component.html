@@ -1,0 +1,82 @@
+<div class="top-wrap-btn text-right">
+  <button type="button" (click)="resetForm(projectForm); projectModal.show()" class="btn btn-sm btn-outline-success"
+    [hidden]="roleService.userMatch()">Add</button>
+</div>
+<div *ngIf="service.projectList.length==0" class="text-center font-italic card ml-5 mr-5">
+  <div class="card-body">
+    <p>No information about projects.</p>
+  </div>
+</div>
+
+<div class="card ml-5 mr-5 mt-3" *ngFor="let project of service.projectList">
+  <div class="card-body">
+    <table class="table table-hover table-block-info">
+
+      <h5 class="card-title">{{project.Name}}</h5>
+      <tr>
+        <td>Reference to the project</td>
+        <td>{{project.ReferenceToTheProject}}</td>
+      </tr>
+      <tr>
+        <td>Description about tasks on the project</td>
+        <td class="text-break">{{project.DescriptionOfTasks}}</td>
+      </tr>
+      <tr class="footer-row">
+        <tfoot class="text-center">
+          <td><button (click)="onDelete(project.Id)" class="btn btn-sm btn-outline-danger"
+              [hidden]="roleService.userMatch()">Delete</button></td>
+          <td><button (click)="populateForm(project); projectModal.show()" data-toggle="modal" data-target="#projectModal"
+              class="btn btn-sm btn-outline-warning" [hidden]="roleService.userMatch()">Edit</button></td>
+        </tfoot>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="modal fade" bsModal #projectModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="projectModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="projectModalLabel">Project</h5>
+        <button class="close" type="button" (click)="projectModal.hide();" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <form class="col-sm-12" #projectForm="ngForm" autocomplete="off" (ngSubmit)="onSubmit(projectForm)">
+            <input type="hidden" name="Id" #Id="ngModel" [(ngModel)]="service.formData.Id">
+            <input type="hidden" name="ProgrammerId" #ProgrammerId="ngModel"
+              [(ngModel)]="service.formData.ProgrammerId">
+            <div class="form-group">
+              <label>Name of the project</label>
+              <input type="text" class="form-control" max-length="64" name="Name" #Name="ngModel"
+                [(ngModel)]="service.formData.Name" required>
+              <div class="validation-error" *ngIf="Name.invalid && Name.touched">This field is
+                required</div>
+            </div>
+            <div class="form-group">
+              <label>Reference to The Project</label>
+              <input type="text" class="form-control" name="ReferenceToTheProject" #ReferenceToTheProject="ngModel"
+                [(ngModel)]="service.formData.ReferenceToTheProject">
+              <div class="validation-error" *ngIf="ReferenceToTheProject.invalid && ReferenceToTheProject.touched">This
+                field is
+                required</div>
+            </div>
+            <div class="form-group">
+              <label>Description about tasks on the project</label>
+              <textarea placeholder="Required example textarea" max-length="1024" class="form-control"
+                name="DescriptionOfTasks" #DescriptionOfTasks="ngModel"
+                [(ngModel)]="service.formData.DescriptionOfTasks" required></textarea>
+              <div class="validation-error" *ngIf="DescriptionOfTasks.invalid && DescriptionOfTasks.touched">This field
+                is
+                required</div>
+            </div>
+            <div class="modal-footer">
+              <button [disabled]="!projectForm.valid" type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
