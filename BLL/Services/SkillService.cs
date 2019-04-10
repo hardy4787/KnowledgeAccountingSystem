@@ -40,9 +40,12 @@ namespace BLL.Services
             return Mapper.Map<IEnumerable<ProgrammerSkill>, IEnumerable<ProgrammerSkillDTO>>(programmerSkills);
         }
 
-        public void InsertSkillToProgrammer(ProgrammerSkillDTO skill)
+        public void InsertSkillToProgrammer(ProgrammerSkillDTO skillDTO)
         {
-            Database.ProgrammerSkills.Insert(Mapper.Map<ProgrammerSkillDTO, ProgrammerSkill>(skill));
+            var skill = Database.ProgrammerSkills.Get(skillDTO.ProgrammerId, skillDTO.SkillId);
+            if (skill != null)
+                throw new ValidationException("Skill of programmer with this id already exists", "Id");
+            Database.ProgrammerSkills.Insert(Mapper.Map<ProgrammerSkillDTO, ProgrammerSkill>(skillDTO));
             Database.Save();
         }
 
@@ -76,7 +79,7 @@ namespace BLL.Services
         }
         public void Insert(SkillDTO skillDto)
         {
-            Skill skill = Database.Skills.GetAll().Where(x => x.Name == skillDto.Name).FirstOrDefault();
+            var skill = Database.Skills.GetAll().Where(x => x.Name == skillDto.Name).FirstOrDefault();
             if (skill != null)
                 throw new ValidationException("This skill already exists", "Name");
             Database.Skills.Insert(Mapper.Map<SkillDTO, Skill>(skillDto));

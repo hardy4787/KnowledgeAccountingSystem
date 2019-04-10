@@ -9,6 +9,7 @@ using UIWebApi.Models;
 using System.Web;
 using System.Net.Http;
 using Microsoft.AspNet.Identity.Owin;
+using UIWebApi.Filters;
 
 namespace UIWebApi.Controllers
 {
@@ -31,7 +32,6 @@ namespace UIWebApi.Controllers
             }
         }
 
-        // POST api/Account/Register
         [AllowAnonymous]
         [Route("Register")]
         public async Task<IHttpActionResult> Register([FromBody]RegisterModel model)
@@ -49,6 +49,7 @@ namespace UIWebApi.Controllers
                 FullName = model.FullName,
                 Role = "user"
             };
+
             IdentityOperations operationDetails = await UserService.CreateUserAsync(userDto);
             if (!operationDetails.Succeeded)
             {
@@ -57,33 +58,19 @@ namespace UIWebApi.Controllers
             }
             return Ok(operationDetails);
         }
+
+        [AccessActionFilter]
         [HttpDelete]
         [Route("{userId}")]
         public async Task<IHttpActionResult> DeleteUser([FromUri] string userId)
         {
             IdentityOperations operationDetails = await UserService.DeleteUser(userId);
-            if (operationDetails.Succeeded) return Ok();
-            else return BadRequest(operationDetails.Message);
+            if (!operationDetails.Succeeded)
+            {
+                ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
+                return BadRequest(ModelState);
+            }
+            return Ok(operationDetails);
         }
-        //private IHttpActionResult GetErrorResult(OperationDetails result)
-        //{
-        //    if (result == null)
-        //    {
-        //        return InternalServerError();
-        //    }
-
-        //    if (!result.Succedeed)
-        //    {
-        //        ModelState.AddModelError(result.Property, result.Message);
-
-        //        if (ModelState.IsValid)
-        //        {
-        //            return BadRequest();
-        //        }
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    return null;
-        //}
     }
 }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using UIWebApi.Filters;
 using UIWebApi.Models;
 
 namespace UIWebApi.Controllers
@@ -23,13 +24,13 @@ namespace UIWebApi.Controllers
             _projectService = projectService;
         }
 
-        [Route("{id}/projects")]
-        public IHttpActionResult GetProjects(string id)
+        [Route("{userId}/projects")]
+        public IHttpActionResult GetProjects(string userId)
         {
             IEnumerable<ProjectModel> projects;
             try
             {
-                projects = Mapper.Map<IEnumerable<ProjectDTO>, IEnumerable<ProjectModel>>(_projectService.GetProjectsByProfileId(id));
+                projects = Mapper.Map<IEnumerable<ProjectDTO>, IEnumerable<ProjectModel>>(_projectService.GetProjectsByProfileId(userId));
             }
             catch (ValidationException ex)
             {
@@ -39,21 +40,23 @@ namespace UIWebApi.Controllers
             return Ok(projects);
         }
 
-        [Route("{id}/projects")]
+        [AccessActionFilter]
+        [Route("{userId}/projects")]
         [HttpPost]
-        public IHttpActionResult AddProject([FromBody]ProjectModel project)
+        public IHttpActionResult AddProject(string userId, [FromBody]ProjectModel project)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             _projectService.Insert(Mapper.Map<ProjectModel, ProjectDTO>(project));
-            return Ok(new { message = "Project added successfully" });
+            return Ok(new { Message = "Project added successfully" });
         }
 
-        [Route("{id}/projects/{projectId}")]
+        [AccessActionFilter]
+        [Route("{userId}/projects/{projectId}")]
         [HttpPut]
-        public IHttpActionResult UpdateProject(int projectId, [FromBody]ProjectModel project)
+        public IHttpActionResult UpdateProject(string userId, int projectId, [FromBody]ProjectModel project)
         {
             if (!ModelState.IsValid)
             {
@@ -68,11 +71,12 @@ namespace UIWebApi.Controllers
                 ModelState.AddModelError(ex.Property, ex.Message);
                 return BadRequest(ModelState);
             }
-            return Ok(new { message = "Project changed successfully" });
+            return Ok(new { Message = "Project changed successfully" });
         }
 
-        [Route("{id}/projects/{projectId}")]
-        public IHttpActionResult Delete(int projectId)
+        [AccessActionFilter]
+        [Route("{userId}/projects/{projectId}")]
+        public IHttpActionResult Delete(string userId, int projectId)
         {
             try
             {
@@ -83,7 +87,7 @@ namespace UIWebApi.Controllers
                 ModelState.AddModelError(ex.Property, ex.Message);
                 return BadRequest(ModelState);
             }
-            return Ok(new { message = "Project deleted successfully" });
+            return Ok(new { Message = "Project deleted successfully" });
         }
     }
 }

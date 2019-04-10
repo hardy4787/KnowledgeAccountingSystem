@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Web.Http;
+using UIWebApi.Filters;
 using UIWebApi.Models;
 
 namespace UIWebApi.Controllers
@@ -24,13 +25,13 @@ namespace UIWebApi.Controllers
             _workExperienceService = workExperienceService;
         }
 
-        [Route("{id}/work-experience")]
-        public IHttpActionResult GetByProfileId(string id)
+        [Route("{userId}/work-experience")]
+        public IHttpActionResult GetByProfileId(string userId)
         {
             IEnumerable<WorkExperienceModel> workExperience;
             try
             {
-                workExperience = Mapper.Map<IEnumerable<WorkExperienceDTO>, IEnumerable<WorkExperienceModel>>(_workExperienceService.GetWorkExperienceByProfileId(id));
+                workExperience = Mapper.Map<IEnumerable<WorkExperienceDTO>, IEnumerable<WorkExperienceModel>>(_workExperienceService.GetWorkExperienceByProfileId(userId));
             }
             catch (ValidationException ex)
             {
@@ -40,20 +41,31 @@ namespace UIWebApi.Controllers
             return Ok(workExperience);
         }
 
-        [Route("{id}/work-experience")]
+        [AccessActionFilter]
+        [Route("{userId}/work-experience")]
         [HttpPost]
-        public IHttpActionResult AddWorkExperience(string id, [FromBody]WorkExperienceModel workExperience)
+        public IHttpActionResult AddWorkExperience(string userId, [FromBody]WorkExperienceModel workExperience)
         {
-            //var identityClaims = (ClaimsIdentity)User.Identity;
-            //string idSession = identityClaims.FindFirst("Id").Value;
-            //if (id != idSession)
-            //    return StatusCode(HttpStatusCode.Forbidden);
-            _workExperienceService.Insert(Mapper.Map<WorkExperienceModel, WorkExperienceDTO>(workExperience));
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                _workExperienceService.Insert(Mapper.Map<WorkExperienceModel, WorkExperienceDTO>(workExperience));
+            }
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelError(ex.Property, ex.Message);
+                return BadRequest(ModelState);
+            }
             return Ok(new { Message = "Work experience added successfully!" });
         }
+
+        [AccessActionFilter]
         [HttpPut]
         [Route("{id}/work-experience/{workExperienceId}")]
-        public IHttpActionResult UpdateWorkExperience(int workExperienceId, [FromBody]WorkExperienceModel workExperience)
+        public IHttpActionResult UpdateWorkExperience(string userId, int workExperienceId, [FromBody]WorkExperienceModel workExperience)
         {
             if (!ModelState.IsValid)
             {
@@ -71,10 +83,10 @@ namespace UIWebApi.Controllers
             return Ok(new { Message = "Work experience updated successfully!" });
         }
 
-
+        [AccessActionFilter]
         [HttpDelete]
-        [Route("{id}/work-experience/{workExperienceId}")]
-        public IHttpActionResult DeleteWorkExperience(int workExperienceId)
+        [Route("{userId}/work-experience/{workExperienceId}")]
+        public IHttpActionResult DeleteWorkExperience(string userId, int workExperienceId)
         {
             try
             {

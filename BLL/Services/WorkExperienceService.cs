@@ -37,9 +37,12 @@ namespace BLL.Services
             return Mapper.Map<IEnumerable<WorkExperience>, IEnumerable<WorkExperienceDTO>>(workExperience);
         }
 
-        public void Insert(WorkExperienceDTO workExperience)
+        public void Insert(WorkExperienceDTO workExperienceDTO)
         {
-            Database.WorkExperiences.Insert(Mapper.Map<WorkExperienceDTO, WorkExperience>(workExperience));
+            var workExperience = Database.WorkExperiences.Get(workExperienceDTO.Id);
+            if(workExperience != null)
+                throw new ValidationException("Work experience with this id already exists", "Id");
+            Database.WorkExperiences.Insert(Mapper.Map<WorkExperienceDTO, WorkExperience>(workExperienceDTO));
             Database.Save();
         }
 

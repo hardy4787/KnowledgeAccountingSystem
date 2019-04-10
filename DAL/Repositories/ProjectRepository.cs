@@ -42,6 +42,11 @@ namespace DAL.Repositories
 
         public void Update(Project project)
         {
+            var localEntity = db.Projects.Local.FirstOrDefault(x => x.Id == project.Id);
+            if (localEntity != null)
+            {
+                db.Entry(localEntity).State = EntityState.Detached;
+            }
             db.Entry(project).State = EntityState.Modified;
         }
     }

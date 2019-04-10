@@ -8,11 +8,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using UIWebApi.Filters;
 using UIWebApi.Models;
 
 namespace UIWebApi.Controllers
 {
     [RoutePrefix("api/skills")]
+    [Authorize(Roles = "admin")]
     public class SkillController : ApiController
     {
         private readonly ISkillService _skillService;
@@ -22,8 +24,8 @@ namespace UIWebApi.Controllers
             _skillService = skillService;
         }
 
+        [OverrideFilter]
         [Authorize]
-        [HttpGet]
         [Route("")]
         public IHttpActionResult GetSkills()
         {
@@ -52,7 +54,6 @@ namespace UIWebApi.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        [HttpDelete]
         [Route("{skillId:int}")]
         public IHttpActionResult DeleteSkill(int skillId)
         {

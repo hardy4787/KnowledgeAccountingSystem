@@ -9,11 +9,9 @@ namespace BLL.Interfaces
 {
     public interface IProgrammerProfileService
     {
-        IEnumerable<ProgrammerProfileDTO> GetAll();
         ProgrammerProfileDTO Get(string id);
-        void Update(ProgrammerProfileDTO item);
-        void UpdateImageProfileUrl(string url, string id);
-        void DeleteOldImageProfile(string id);
+        void Update(string userId, ProgrammerProfileDTO item);
+        void UpdateImageProfileUrl(string url, string fileType, int fileSize, string id);
         IEnumerable<ProgrammerProfileDTO> GetProgrammersBySkill(int? idSkill, int knowledgeLevel);
         byte[] GenerateReport(IEnumerable<ProgrammerProfileDTO> profiles);
 

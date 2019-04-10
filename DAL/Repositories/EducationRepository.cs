@@ -41,6 +41,11 @@ namespace DAL.Repositories
 
         public void Update(Education education)
         {
+            var localEntity = db.Educations.Local.FirstOrDefault(x => x.Id == education.Id);
+            if (localEntity != null)
+            {
+                db.Entry(localEntity).State = EntityState.Detached;
+            }
             db.Entry(education).State = EntityState.Modified;
         }
     }

@@ -28,9 +28,12 @@ namespace BLL.Services
             return Mapper.Map<IEnumerable<Project>, IEnumerable<ProjectDTO>>(project);
         }
 
-        public void Insert(ProjectDTO project)
+        public void Insert(ProjectDTO projectDTO)
         {
-            Database.Projects.Insert(Mapper.Map<ProjectDTO, Project>(project));
+            var project = Database.Projects.Get(projectDTO.Id);
+            if (project != null)
+                throw new ValidationException("Project with this id already exists", "Id");
+            Database.Projects.Insert(Mapper.Map<ProjectDTO, Project>(projectDTO));
             Database.Save();
         }
 

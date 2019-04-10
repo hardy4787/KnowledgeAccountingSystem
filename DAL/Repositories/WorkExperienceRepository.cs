@@ -42,6 +42,11 @@ namespace DAL.Repositories
 
         public void Update(WorkExperience workExperience)
         {
+            var localEntity = db.WorkExperiences.Local.FirstOrDefault(x => x.Id == workExperience.Id);
+            if (localEntity != null)
+            {
+                db.Entry(localEntity).State = EntityState.Detached;
+            }
             db.Entry(workExperience).State = EntityState.Modified;
         }
     }

@@ -28,9 +28,12 @@ namespace BLL.Services
             return Mapper.Map<IEnumerable<Education>, IEnumerable<EducationDTO>>(education);
         }
           
-        public void Insert(EducationDTO education)
+        public void Insert(EducationDTO educationDTO)
         {
-            Database.Educations.Insert(Mapper.Map<EducationDTO, Education > (education));
+            var education = Database.Educations.Get(educationDTO.Id);
+            if (education != null)
+                throw new ValidationException("Education with this id already exists", "Id");
+            Database.Educations.Insert(Mapper.Map<EducationDTO, Education > (educationDTO));
             Database.Save();
         }
 

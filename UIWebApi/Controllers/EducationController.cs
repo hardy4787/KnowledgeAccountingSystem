@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using UIWebApi.Filters;
 using UIWebApi.Models;
 
 namespace UIWebApi.Controllers
@@ -25,13 +26,13 @@ namespace UIWebApi.Controllers
         }
 
         [HttpGet]
-        [Route("{id}/education")]
-        public IHttpActionResult GetByProfileId(string id)
+        [Route("{userId}/education")]
+        public IHttpActionResult GetByProfileId(string userId)
         {
             IEnumerable<EducationModel> education;
             try
             {
-                education = Mapper.Map<IEnumerable<EducationDTO>, IEnumerable<EducationModel>>(_educationService.GetEducationByProfileId(id));
+                education = Mapper.Map<IEnumerable<EducationDTO>, IEnumerable<EducationModel>>(_educationService.GetEducationByProfileId(userId));
             }
             catch (ValidationException ex)
             {
@@ -41,9 +42,10 @@ namespace UIWebApi.Controllers
             return Ok(education);
         }
 
+        [AccessActionFilter]
         [HttpPost]
-        [Route("{id}/education")]
-        public IHttpActionResult AddEducationProgrammer([FromBody]EducationModel education)
+        [Route("{userId}/education")]
+        public IHttpActionResult AddEducationProgrammer(string userId, [FromBody]EducationModel education)
         {
             if (!ModelState.IsValid)
             {
@@ -53,9 +55,10 @@ namespace UIWebApi.Controllers
             return Ok(new { Message = "Education added successfully!" });
         }
 
-        [Route("{id}/education/{educationId}")]
+        [AccessActionFilter]
+        [Route("{userId}/education/{educationId}")]
         [HttpPut]
-        public IHttpActionResult UpdateEducationProgrammer(int educationId, [FromBody]EducationModel education)
+        public IHttpActionResult UpdateEducationProgrammer(string userId, int educationId, [FromBody]EducationModel education)
         {
             if (!ModelState.IsValid)
             {
@@ -73,9 +76,10 @@ namespace UIWebApi.Controllers
             return Ok(new { Message = "Education updated successfully!" });
         }
 
+        [AccessActionFilter]
         [HttpDelete]
-        [Route("{id}/education/{educationId}")]
-        public IHttpActionResult Delete(int educationId)
+        [Route("{userId}/education/{educationId}")]
+        public IHttpActionResult Delete(string userId, int educationId)
         {
             try
             {

@@ -40,6 +40,11 @@ namespace DAL.Repositories
 
         public void Update(ProgrammerSkill programmerSkill)
         {
+            var localEntity = db.ProgrammerSkills.Local.FirstOrDefault(x => x.ProgrammerId == programmerSkill.ProgrammerId && x.SkillId == programmerSkill.SkillId);
+            if (localEntity != null)
+            {
+                db.Entry(localEntity).State = EntityState.Detached;
+            }
             db.Entry(programmerSkill).State = EntityState.Modified;
         }
     }

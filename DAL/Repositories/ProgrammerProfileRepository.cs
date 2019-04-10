@@ -42,6 +42,11 @@ namespace DAL.Repositories
 
         public void Update(ProgrammerProfile programmer)
         {
+            var localEntity = db.ProgrammerProfiles.Local.FirstOrDefault(x => x.Id == programmer.Id);
+            if (localEntity != null)
+            {
+                db.Entry(localEntity).State = EntityState.Detached;
+            }
             db.Entry(programmer).State = EntityState.Modified;
         }
     }

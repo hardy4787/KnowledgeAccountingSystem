@@ -53,13 +53,13 @@ namespace BLL.Services
 
         public async Task<IdentityUser> FindUserAsync(string userName, string password)
         {
-            IdentityUser user = await Database.UserManager.FindAsync(userName, password);
+            var user = await Database.UserManager.FindAsync(userName, password);
             return user;
         }
 
         public async Task<IdentityOperations> DeleteUser(string userId)
         {
-            ApplicationUser user = await Database.UserManager.FindByIdAsync(userId);
+            var user = await Database.UserManager.FindByIdAsync(userId);
             if (user != null)
             {
                 Database.ProgrammerProfiles.Delete(userId);

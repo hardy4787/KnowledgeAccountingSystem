@@ -14,5 +14,6 @@ namespace DAL.Identity
                 : base(store)
         {
         }
+
     }
 }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using UIWebApi.Filters;
 using UIWebApi.Models;
 
 namespace UIWebApi.Controllers
@@ -24,30 +25,31 @@ namespace UIWebApi.Controllers
         }
 
         [HttpGet]
-        [Route("{id}/skills")]
-        public IHttpActionResult GetProgrammerSkills(string id)
+        [Route("{userId}/skills")]
+        public IHttpActionResult GetProgrammerSkills(string userId)
         {
             IEnumerable<ProgrammerSkillModel> skills;
             try
             {
-                skills = Mapper.Map<IEnumerable<ProgrammerSkillDTO>, IEnumerable<ProgrammerSkillModel>>(_skillService.GetSkillsOfProgrammer(id));
+                skills = Mapper.Map<IEnumerable<ProgrammerSkillDTO>, IEnumerable<ProgrammerSkillModel>>(_skillService.GetSkillsOfProgrammer(userId));
             }
             catch (ValidationException ex)
             {
                 ModelState.AddModelError(ex.Property, ex.Message);
                 return BadRequest(ModelState);
             }
+
             return Ok(skills);
         }
 
         [HttpGet]
-        [Route("{id}/untouched-skills")]
-        public IHttpActionResult GetProgrammerUntouchedSkills(string id)
+        [Route("{userId}/untouched-skills")]
+        public IHttpActionResult GetProgrammerUntouchedSkills(string userId)
         {
             IEnumerable<SkillModel> skills;
             try
             {
-                skills = Mapper.Map<IEnumerable<SkillDTO>, IEnumerable<SkillModel>>(_skillService.GetSkillsThatTheProgrammerDoesNotHave(id));
+                skills = Mapper.Map<IEnumerable<SkillDTO>, IEnumerable<SkillModel>>(_skillService.GetSkillsThatTheProgrammerDoesNotHave(userId));
             }
             catch (ValidationException ex)
             {
@@ -57,9 +59,10 @@ namespace UIWebApi.Controllers
             return Ok(skills);
         }
 
+        [AccessActionFilter]
         [HttpPost]
-        [Route("{id}/skills")]
-        public IHttpActionResult AddSkillToProgrammer([FromBody]ProgrammerSkillModel programmerSkill)
+        [Route("{userId}/skills")]
+        public IHttpActionResult AddSkillToProgrammer(string userId, [FromBody]ProgrammerSkillModel programmerSkill)
         {
             if (!ModelState.IsValid)
             {
@@ -70,9 +73,10 @@ namespace UIWebApi.Controllers
             return Ok(new { Message = "Skill added successfully!" });
         }
 
+        [AccessActionFilter]
         [HttpPut]
-        [Route("{id}/skills/{skillId}")]
-        public IHttpActionResult UpdateSkillProgrammer(int skillId, [FromBody]ProgrammerSkillModel programmerSkill)
+        [Route("{userId}/skills/{skillId}")]
+        public IHttpActionResult UpdateSkillProgrammer(string userId, int skillId, [FromBody]ProgrammerSkillModel programmerSkill)
         {
             if (!ModelState.IsValid)
             {
@@ -90,13 +94,14 @@ namespace UIWebApi.Controllers
             return Ok(new { Message = "Skill updated successfully!" });
         }
 
+        [AccessActionFilter]
         [HttpDelete]
-        [Route("{id}/skills/{skillId}")]
-        public IHttpActionResult DeleteSkillProgrammer(string id, int skillId)
+        [Route("{userId}/skills/{skillId}")]
+        public IHttpActionResult DeleteSkillProgrammer(string userId, int skillId)
         {
             try
             {
-                _skillService.DeleteSkillOfProgrammer(id, skillId);
+                _skillService.DeleteSkillOfProgrammer(userId, skillId);
             }
             catch (ValidationException ex)
             {
