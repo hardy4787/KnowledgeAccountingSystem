@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Profile } from '../profile/profile.model';
 import { ProgrammerModel } from './manager.model';
-import { NgForm } from '@angular/forms';
-import { Skill } from '../skill/skill.model';
-import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -18,15 +16,16 @@ export class ManagerService {
   profileList : Profile[] = [];
   readonly rootUrl = 'http://localhost:16143/api/manager'
 
-  constructor(private http : HttpClient) { }
+  constructor(private http : HttpClient, private router: Router) { }
 
 
   refreshInfo(programmer : ProgrammerModel){
-    const body: ProgrammerModel = {
-      SkillId : programmer.SkillId,
-      KnowledgeLevel: programmer.KnowledgeLevel
-    }
-    return this.http.get(this.rootUrl + "/profiles/" + body.SkillId + "/" + body.KnowledgeLevel).toPromise().then(res=>this.profileList = res as Profile[]);
+    const params = new HttpParams({
+      fromString: `skillId=${programmer.SkillId}&knowledgeLevel=${programmer.KnowledgeLevel}`
+    });
+    this.router.navigate(['/manager', 'profiles'], { queryParams: { skillId : this.formData.SkillId, knowledgeLevel : this.formData.KnowledgeLevel } });
+    return this.http.get(this.rootUrl + "/profiles", {
+      params : params }).toPromise().then(res=>this.profileList = res as Profile[]);
   }
   createReport(programmer : ProgrammerModel){
     const body: ProgrammerModel = {

@@ -37,7 +37,7 @@
     </table>
   </div>
 </div>
-<div class="modal fade" bsModal #educationModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="educationModal">
+<div class="modal fade" bsModal #educationModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog" aria-labelledby="educationModal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -64,7 +64,7 @@
             <div class="form-group">
               <label>Name of the Institution</label>
               <input type="text" class="form-control" maxLength="64" name="NameInstitution" #NameInstitution="ngModel"
-                [(ngModel)]="service.formData.NameInstitution" required>
+                [(ngModel)]="service.formData.NameInstitution" required checkspaces>
               <div class="validation-error" *ngIf="NameInstitution.invalid && NameInstitution.touched">This field is
                 required</div>
             </div>

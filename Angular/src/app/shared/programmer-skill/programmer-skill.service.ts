@@ -33,6 +33,7 @@ export class ProgrammerSkillService {
   postProgrammerSkill(formData: ProgrammerSkill) {
     formData.KnowledgeLevel = this.formData.KnowledgeLevel;
     formData.ProgrammerId = localStorage.getItem('userId');
+    alert(this.rootUrl + localStorage.getItem('userId') + "/skills");
     return this.http.post(this.rootUrl + localStorage.getItem('userId') + "/skills", formData);
   }
 
