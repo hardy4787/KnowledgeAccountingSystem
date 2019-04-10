@@ -1,0 +1,23 @@
+.profile-link{
+	color : inherit;
+}
+
+.profile-link:hover{
+	text-decoration: none;
+}
+
+.table-block-info.manager-info tr>td:nth-child(2){
+	max-width: 263.727px;
+	position: relative;
+	overflow: hidden;
+	white-space: nowrap; 
+	text-overflow: ellipsis;
+}
+
+.card-block-wrap{
+	width: 400px;
+}
+
+.manager-info h5{
+	white-space : nowrap;
+}

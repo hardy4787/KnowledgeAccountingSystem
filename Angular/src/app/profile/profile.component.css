@@ -1,0 +1,13 @@
+.pointer{
+	cursor: pointer;
+}
+
+
+@media (max-width: 768px) {
+	#sidebar-wrapper{
+		position: absolute;
+		top :57px;
+		z-index: 1001;
+		margin-left : 0;
+	}
+}

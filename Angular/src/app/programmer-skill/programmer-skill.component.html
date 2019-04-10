@@ -1,0 +1,78 @@
+<div class="top-wrap-btn text-right">
+  <button data-toggle="modal"
+    (click)="conditionAddForm=true; resetForm(programmerSkillForm); getUntouchedSkills(); programmerSkillModal.show();"
+    data-target="#programmerSkillModal" class="btn btn-sm btn-outline-success"
+    [hidden]="roleService.userMatch()">Add</button>
+</div>
+<div *ngIf="service.programmerSkillList.length==0" class="text-center font-italic card ml-5 mr-5">
+  <div class="card-body">
+    <p>No information about skills.</p>
+  </div>
+</div>
+
+<div class="card ml-5 mr-5 mt-3" *ngFor="let programmerSkill of service.programmerSkillList">
+  <div class="card-body">
+    <table class="table table-hover table-block-info">
+      <h5 class="card-title" [tooltip]="getTooltipSkillByIdSkill(programmerSkill.SkillId)">
+        {{getNameSkillByIdSkill(programmerSkill.SkillId)}}
+      </h5>
+      <tr>
+        <td>KnowledgeLevel</td>
+        <td>
+          <div>
+            <progressbar [max]="100" [value]="programmerSkill.KnowledgeLevel" style="height: 2rem">
+              <span class="text-nowrap">{{programmerSkill.KnowledgeLevel}} / {{100}}</span>
+            </progressbar>
+          </div>
+        </td>
+      </tr>
+      <tr class="footer-row">
+        <tfoot class="text-center">
+          <td><button (click)="onDelete(programmerSkill.SkillId)" class="btn btn-sm btn-outline-danger"
+              [hidden]="roleService.userMatch()">Delete</button></td>
+          <td><button
+              (click)="conditionAddForm=false; getUntouchedSkills(); populateForm(programmerSkill); programmerSkillModal.show()"
+              data-toggle="modal" data-target="#programmerSkillModal" class="btn btn-sm btn-outline-warning"
+              [hidden]="roleService.userMatch()">Edit</button></td>
+        </tfoot>
+      </tr>
+    </table>
+
+  </div>
+</div>
+
+<div class="modal fade" bsModal #programmerSkillModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="programmerSkillModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="programmerSkillModalLabel">Skill</h5>
+        <button class="close" (click)="programmerSkillModal.hide();" type="button" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <form class="col-sm-12" #programmerSkillForm="ngForm" autocomplete="off" (ngSubmit)="onSubmit(programmerSkillForm)">
+            <input type="hidden" name="ProgrammerId" #ProgrammerId="ngModel"
+              [(ngModel)]="service.formData.ProgrammerId">
+            <select class="custom-select" name="SkillId" #SkillId="ngModel" [(ngModel)]="service.formData.SkillId"
+              required>
+              <option *ngIf="conditionAddForm;else unset" [value]="null">Please select value</option>
+              <ng-template #unset>
+                <option [value]="service.formData.SkillId">{{getNameSkillByIdSkill(service.formData.SkillId)}}</option>
+              </ng-template>
+              <option [title]="skill.Description" [hidden]="!conditionAddForm" *ngFor="let skill of service.skillList"
+                [value]="skill.Id">{{skill.Name}}</option>
+            </select>
+            <div class="form-group mt-5">
+              <mv-slider [(value)]="service.formData.KnowledgeLevel" slider-tooltip="show" [min]="10" [max]="100"
+                [step]="10" [enabled]="enabled"></mv-slider>
+            </div>
+            <div class="modal-footer">
+              <button [disabled]="!programmerSkillForm.valid" type="submit" class="btn btn-primary">Save</button> </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

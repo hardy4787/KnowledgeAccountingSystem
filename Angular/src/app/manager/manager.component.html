@@ -1,0 +1,23 @@
+<div class="d-flex" id="wrapper">
+  <div id="page-content-wrapper">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom justify-content-between">
+      <a class="nav-link navbar-brand text-muted">Admin panel<span class="sr-only"></span></a>
+      <div class="btn-group" dropdown placement="bottom right">
+        <button id="button-alignment" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+          aria-controls="dropdown-alignment">
+          Menu <span class="caret"></span>
+        </button>
+        <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-alignment">
+          <li role="menuitem"><a class="dropdown-item" [routerLink]="['/manager', 'profiles']">Main</a></li>
+          <li role="menuitem"><a class="dropdown-item" [routerLink]="['/manager', 'skills']">Customize skills</a></li>
+          <li class="divider dropdown-divider"></li>
+          <li role="menuitem"><a class="dropdown-item" (click)="LogOut()">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+

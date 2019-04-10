@@ -1,0 +1,28 @@
+<form class="col-sm-12" #userRegistrationForm="ngForm" (ngSubmit)="OnSubmit(userRegistrationForm)">
+  <div class="form-group">
+    <label data-error="Requored field!">User Name</label>
+    <input type="text" class="form-control" name="UserName" #UserName="ngModel" [(ngModel)]="user.UserName" required>
+    <div class="validation-error" *ngIf="UserName.invalid && UserName.touched">This field is required</div>
+  </div>    
+  <div class="form-group">
+    <label data-error="Requored field!">Full Name</label>
+    <input type="text" class="form-control" name="FullName" #FullName="ngModel" [(ngModel)]="user.FullName" required>
+    <div class="validation-error" *ngIf="FullName.invalid && FullName.touched">This field is required</div>
+  </div>        
+  <div class="form-group">
+    <label>Password</label>
+    <input type="password" class="form-control" name="Password" #Password="ngModel" [(ngModel)]="user.Password" required>
+    <div class="validation-error" *ngIf="Password.invalid && Password.touched">This field is required</div>
+  </div>         
+  <div class="form-group">
+    <label>Confirm Password</label> 
+    <input type="password" class="form-control" name="ConfirmPassword" #ConfirmPassword="ngModel" [(ngModel)]="user.ConfirmPassword" required>
+    <div class="validation-error" *ngIf="ConfirmPassword.invalid && ConfirmPassword.touched">This field is required</div>
+  </div>        
+  <div class="form-group">
+    <label>Email</label>
+    <input type="email" class="form-control" name="Email" #Email="ngModel" [(ngModel)]="user.Email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+    <div class="validation-error" *ngIf="Email.invalid && Email.touched">Invalid email</div>
+  </div>
+  <button [disabled]="!userRegistrationForm.valid" type="submit" class="btn btn-primary">Submit</button>
+</form>

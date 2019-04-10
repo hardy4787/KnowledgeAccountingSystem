@@ -1,0 +1,150 @@
+<div class="top-wrap-btn text-right">
+  <button type="button" (click)="populateForm(service.profile); mainInfoModal.show()"
+    class="btn btn-md btn-outline-warning" [hidden]="roleService.userMatch()"><i class="material-icons">
+      border_color
+    </i> Edit<span class="sr-only"></span></button>
+</div>
+<div class="row no-gutters bg-light justify-content-center align-items-center">
+  <div class="col-lg-4 ml-4 mr-4">
+    <div class="text-center card">
+      <div class="card-body">
+          <img [src]="sanitize(setImageProfile())" class="rounded mx-auto d-block img-avatar" style="width:200px; height:200px;">
+        <div class="mt-2">
+          <button data-toggle="modal" (click)="imageProfileModal.show()" data-target="#imageProfileModal"
+            class="btn btn-sm btn-outline-warning" [hidden]="roleService.userMatch()">Change</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col mt-4 mr-4 ml-4">
+    <div class="card">
+
+      <div class="card-body">
+
+        <h5 class="card-title">Personal data</h5>
+        <table class="table main-info table-hover table-block-info">
+          <tbody>
+            <tr>
+              <td>Full Name :</td>
+              <td>{{service.profile.FullName}}</td>
+            </tr>
+            <tr *ngIf="service.profile.Age!=0">
+              <td>Age :</td>
+              <td>{{service.profile.Age}}</td>
+            </tr>
+            <tr>
+              <td>Email :</td>
+              <td>{{service.profile.Email}}</td>
+            </tr>
+            <tr *ngIf="service.profile.Phone!=null">
+              <td>Phone :</td>
+              <td>{{service.profile.Phone}}</td>
+            </tr>
+            <tr *ngIf="service.profile.GitHub!=null">
+              <td>GitHub :</td>
+              <td>{{service.profile.GitHub}}</td>
+            </tr>
+            <tr *ngIf="service.profile.Address!=null">
+              <td>Address :</td>
+              <td>{{service.profile.Address}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" bsModal #mainInfoModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="mainInfoModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="mainInfoModalLabel">Personal data</h5>
+        <button class="close" type="button" (click)="mainInfoModal.hide();" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <form class="col-sm-12" #mainInfoForm="ngForm" (ngSubmit)="OnSubmit(mainInfoForm)">
+            <input type="hidden" name="ImageProfileUrl" #ImageProfileUrl="ngModel"
+              [(ngModel)]="service.formData.ImageProfileUrl">
+            <div class="form-group">
+              <label data-error="Required field!" >Full Name</label>
+              <input type="text" class="form-control" maxlength="64" name="FullName" #FullName="ngModel"
+                [(ngModel)]="service.formData.FullName" required>
+              <div class="validation-error" *ngIf="FullName.invalid && FullName.touched">This field is required</div>
+            </div>
+            <div class="form-group">
+              <label>Age</label>
+              <input type="number" class="form-control" max="120" min="10" name="Age" #Age="ngModel" [(ngModel)]="service.formData.Age"
+                required>
+              <div class="validation-error" *ngIf="Age.invalid && Age.touched">This field is required</div>
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" class="form-control" maxlength="64" name="Email" #Email="ngModel"
+                [(ngModel)]="service.formData.Email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+              <div class="validation-error" *ngIf="Email.invalid && Email.touched">Invalid email</div>
+            </div>
+            <div class="form-group">
+              <label>Phone</label>
+              <input type="telephone" class="form-control" maxlength="64" name="Phone" #Phone="ngModel" [(ngModel)]="service.formData.Phone"
+                required pattern="[0-9]+">
+              <div class="validation-error" *ngIf="Phone.invalid && Phone.touched">Invalid phone</div>
+            </div>
+
+            <div class="form-group">
+              <label>GitHub</label>
+              <input type="text" class="form-control" maxlength="64" name="GitHub" #GitHub="ngModel"
+                [(ngModel)]="service.formData.GitHub" required>
+              <div class="validation-error" *ngIf="GitHub.invalid && GitHub.touched">This field is required</div>
+            </div>
+            <div class="form-group">
+              <label>Address</label>
+              <input type="text" class="form-control" maxlength="64" name="Address" #Address="ngModel"
+                [(ngModel)]="service.formData.Address" required>
+              <div class="validation-error" *ngIf="Address.invalid && Address.touched">This field is required</div>
+            </div>
+            <div class="modal-footer">
+              <button [disabled]="!mainInfoForm.valid" type="submit" class="btn btn-primary">Save</button>
+              <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" bsModal #imageProfileModal="bs-modal" tabindex="-1" role="dialog"
+  aria-labelledby="imageProfileModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="imageProfileModalLabel">Edit photo of profile</h5>
+        <button class="close" type="button" (click)="imageProfileModal.hide();" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <form class="col-sm-12" #imageProfileForm="ngForm" (ngSubmit)="OnImageProfileSubmit(Image)">
+            <div class="image-file">
+              <input type="file" #Image accept="image/*" (change)="handleFileInput($event.target.files)"
+                class="custom-file-input" id="imageProfileFile">
+              <label class="custom-file-label" for="imageProfileFile">Choose file</label>
+              <div class="mt-2"><img [src]="modalImageUrl" class="rounded mx-auto d-block"
+                  style="width:200px; height:200px;"></div>
+            </div>
+            <div class="modal-footer">
+              <button [disabled]="Image.value=='' || !imageProfileForm.valid" type="submit"
+                class="btn btn-primary">Save</button>
+              <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
