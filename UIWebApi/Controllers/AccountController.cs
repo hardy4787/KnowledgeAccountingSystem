@@ -10,6 +10,8 @@ using System.Web;
 using System.Net.Http;
 using Microsoft.AspNet.Identity.Owin;
 using UIWebApi.Filters;
+using WebApiApp.Filters;
+using System;
 
 namespace UIWebApi.Controllers
 {
@@ -24,23 +26,13 @@ namespace UIWebApi.Controllers
                 return Request.GetOwinContext().GetUserManager<IUserService>();
             }
         }
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return Request.GetOwinContext().Authentication;
-            }
-        }
 
+        [ModelValidation]
         [AllowAnonymous]
         [Route("Register")]
         public async Task<IHttpActionResult> Register([FromBody]RegisterModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
+            IdentityOperations operationDetails;
             UserDTO userDto = new UserDTO
             {
                 Email = model.Email,
@@ -49,12 +41,17 @@ namespace UIWebApi.Controllers
                 FullName = model.FullName,
                 Role = "user"
             };
-
-            IdentityOperations operationDetails = await UserService.CreateUserAsync(userDto);
+            try
+            {
+                operationDetails = await UserService.CreateUserAsync(userDto);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
             if (!operationDetails.Succeeded)
             {
-                ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
-                return BadRequest(ModelState);
+                return BadRequest(operationDetails.Message);
             }
             return Ok(operationDetails);
         }
@@ -64,11 +61,18 @@ namespace UIWebApi.Controllers
         [Route("{userId}")]
         public async Task<IHttpActionResult> DeleteUser([FromUri] string userId)
         {
-            IdentityOperations operationDetails = await UserService.DeleteUser(userId);
+            IdentityOperations operationDetails;
+            try
+            {
+                operationDetails = await UserService.DeleteUser(userId);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
             if (!operationDetails.Succeeded)
             {
-                ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
-                return BadRequest(ModelState);
+                return BadRequest(operationDetails.Message);
             }
             return Ok(operationDetails);
         }

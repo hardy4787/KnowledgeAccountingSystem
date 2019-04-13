@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Web.Http;
 using UIWebApi.Filters;
 using UIWebApi.Models;
+using WebApiApp.Filters;
 
 namespace UIWebApi.Controllers
 {
@@ -34,42 +35,53 @@ namespace UIWebApi.Controllers
             }
             catch (ValidationException ex)
             {
-                ModelState.AddModelError(ex.Property, ex.Message);
-                return BadRequest(ModelState);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
             }
             return Ok(projects);
         }
 
+        [ModelValidation]
         [AccessActionFilter]
         [Route("{userId}/projects")]
         [HttpPost]
         public IHttpActionResult AddProject(string userId, [FromBody]ProjectModel project)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                _projectService.Insert(Mapper.Map<ProjectModel, ProjectDTO>(project));
             }
-            _projectService.Insert(Mapper.Map<ProjectModel, ProjectDTO>(project));
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
             return Ok(new { Message = "Project added successfully" });
         }
 
+        [ModelValidation]
         [AccessActionFilter]
         [Route("{userId}/projects/{projectId}")]
         [HttpPut]
         public IHttpActionResult UpdateProject(string userId, int projectId, [FromBody]ProjectModel project)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             try
             {
                 _projectService.Update(projectId, Mapper.Map<ProjectModel, ProjectDTO>(project));
             }
             catch (ValidationException ex)
             {
-                ModelState.AddModelError(ex.Property, ex.Message);
-                return BadRequest(ModelState);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
             }
             return Ok(new { Message = "Project changed successfully" });
         }
@@ -84,8 +96,11 @@ namespace UIWebApi.Controllers
             }
             catch (ValidationException ex)
             {
-                ModelState.AddModelError(ex.Property, ex.Message);
-                return BadRequest(ModelState);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
             }
             return Ok(new { Message = "Project deleted successfully" });
         }

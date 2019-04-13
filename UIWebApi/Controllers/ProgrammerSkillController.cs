@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Web.Http;
 using UIWebApi.Filters;
 using UIWebApi.Models;
+using WebApiApp.Filters;
 
 namespace UIWebApi.Controllers
 {
@@ -31,12 +32,16 @@ namespace UIWebApi.Controllers
             IEnumerable<ProgrammerSkillModel> skills;
             try
             {
+                if (userId == null) throw new ValidationException("Id", "Id can't be null");
                 skills = Mapper.Map<IEnumerable<ProgrammerSkillDTO>, IEnumerable<ProgrammerSkillModel>>(_skillService.GetSkillsOfProgrammer(userId));
             }
             catch (ValidationException ex)
             {
-                ModelState.AddModelError(ex.Property, ex.Message);
-                return BadRequest(ModelState);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
             }
 
             return Ok(skills);
@@ -53,43 +58,54 @@ namespace UIWebApi.Controllers
             }
             catch (ValidationException ex)
             {
-                ModelState.AddModelError(ex.Property, ex.Message);
-                return BadRequest(ModelState);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
             }
             return Ok(skills);
         }
 
+        [ModelValidation]
         [AccessActionFilter]
         [HttpPost]
         [Route("{userId}/skills")]
         public IHttpActionResult AddSkillToProgrammer(string userId, [FromBody]ProgrammerSkillModel programmerSkill)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                _skillService.InsertSkillToProgrammer(Mapper.Map<ProgrammerSkillModel, ProgrammerSkillDTO>(programmerSkill));
             }
-            _skillService.InsertSkillToProgrammer(Mapper.Map<ProgrammerSkillModel, ProgrammerSkillDTO>(programmerSkill));
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
 
             return Ok(new { Message = "Skill added successfully!" });
         }
 
+        [ModelValidation]
         [AccessActionFilter]
         [HttpPut]
         [Route("{userId}/skills/{skillId}")]
         public IHttpActionResult UpdateSkillProgrammer(string userId, int skillId, [FromBody]ProgrammerSkillModel programmerSkill)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             try
             {
                 _skillService.UpdateSkillOfProgrammer(skillId, Mapper.Map<ProgrammerSkillModel, ProgrammerSkillDTO>(programmerSkill));
             }
             catch (ValidationException ex)
             {
-                ModelState.AddModelError(ex.Property, ex.Message);
-                return BadRequest(ModelState);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
             }
             return Ok(new { Message = "Skill updated successfully!" });
         }
@@ -105,8 +121,11 @@ namespace UIWebApi.Controllers
             }
             catch (ValidationException ex)
             {
-                ModelState.AddModelError(ex.Property, ex.Message);
-                return BadRequest(ModelState);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
             }
             return Ok(new { Message = "Skill deleted successfully!" });
         }

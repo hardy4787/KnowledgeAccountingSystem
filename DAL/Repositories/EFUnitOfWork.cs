@@ -5,6 +5,7 @@ using DAL.Interfaces;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -90,15 +91,6 @@ namespace DAL.Repositories
                 return skillRepository;
             }
         }
-        //public IRepository<PerformedTask> PerformedTasks
-        //{
-        //    get
-        //    {
-        //        if (performedTaskRepository == null)
-        //            performedTaskRepository = new PerformedTaskRepository(db);
-        //        return performedTaskRepository;
-        //    }
-        //}
         public IRepository<Project, int> Projects
         {
             get
@@ -122,7 +114,29 @@ namespace DAL.Repositories
 
         public void Save()
         {
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                StringBuilder sb = new StringBuilder();
+
+                foreach (var failure in ex.EntityValidationErrors)
+                {
+                    sb.AppendFormat("{0} failed validation\n", failure.Entry.Entity.GetType());
+                    foreach (var error in failure.ValidationErrors)
+                    {
+                        sb.AppendFormat("- {0} : {1}", error.PropertyName, error.ErrorMessage);
+                        sb.AppendLine();
+                    }
+                }
+
+                throw new DbEntityValidationException(
+                    "Entity Validation Failed - errors follow:\n" +
+                    sb.ToString(), ex
+                );
+            }
         }
 
         private bool disposed = false;

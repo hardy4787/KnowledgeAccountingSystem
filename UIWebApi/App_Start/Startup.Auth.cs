@@ -18,14 +18,12 @@ namespace UIWebApi
 
             OAuthOptions = new OAuthAuthorizationServerOptions
             {
-                // устанавливает URL, по которому клиент будет получать токен
                 TokenEndpointPath = new PathString("/Token"),
                 Provider = new ApplicationOAuthProvider(),
                 AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
                 AllowInsecureHttp = true
             };
-            // включает в приложении функциональность токенов
             app.UseOAuthBearerTokens(OAuthOptions);
         }
         private IUserService CreateUserService()

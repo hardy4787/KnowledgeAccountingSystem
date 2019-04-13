@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Web.Http;
 using UIWebApi.Filters;
 using UIWebApi.Models;
+using WebApiApp.Filters;
 
 namespace UIWebApi.Controllers
 {
@@ -29,31 +30,41 @@ namespace UIWebApi.Controllers
         [Route("")]
         public IHttpActionResult GetSkills()
         {
-            var skills = Mapper.Map<IEnumerable<SkillDTO>, IEnumerable<SkillModel>>(_skillService.GetSkills());
+            IEnumerable<SkillModel> skills;
+            try
+            {
+                skills = Mapper.Map<IEnumerable<SkillDTO>, IEnumerable<SkillModel>>(_skillService.GetSkills());
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
             return Ok(skills);
         }
-        [Authorize(Roles = "admin")]
+        [ModelValidation]
         [HttpPost]
         [Route("")]
         public IHttpActionResult CreateSkill([FromBody]SkillModel skill)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             try
             {
                 _skillService.Insert(Mapper.Map<SkillModel, SkillDTO>(skill));
             }
             catch (ValidationException ex)
             {
-                ModelState.AddModelError(ex.Property, ex.Message);
-                return BadRequest(ModelState);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
             }
             return Ok(new { Message = "Skill created successfully!" });
         }
 
-        [Authorize(Roles = "admin")]
         [Route("{skillId:int}")]
         public IHttpActionResult DeleteSkill(int skillId)
         {
@@ -63,28 +74,30 @@ namespace UIWebApi.Controllers
             }
             catch (ValidationException ex)
             {
-                ModelState.AddModelError(ex.Property, ex.Message);
-                return BadRequest(ModelState);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
             }
             return Ok(new { Message = "Skill deleted successfully!" });
         }
-        [Authorize(Roles = "admin")]
+        [ModelValidation]
         [HttpPut]
         [Route("{skillId:int}")]
         public IHttpActionResult UpdateSkill(int skillId, [FromBody]SkillModel skill)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             try
             {
                 _skillService.Update(skillId, Mapper.Map<SkillModel, SkillDTO>(skill));
             }
             catch (ValidationException ex)
             {
-                ModelState.AddModelError(ex.Property, ex.Message);
-                return BadRequest(ModelState);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
             }
             return Ok(new { message = "Skill changed successfully" });
         }

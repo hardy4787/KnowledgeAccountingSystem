@@ -169,12 +169,12 @@
     <Compile Include="Controllers\SkillController.cs" />
     <Compile Include="Controllers\WorkExperienceController.cs" />
     <Compile Include="Filters\AccessActionFilterAttribute.cs" />
+    <Compile Include="Filters\ModelValidationAttribute.cs" />
     <Compile Include="Filters\OverrideFilterAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\EducationModel.cs" />
-    <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\ProfileModel.cs" />
     <Compile Include="Models\ProgrammerSkillModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />

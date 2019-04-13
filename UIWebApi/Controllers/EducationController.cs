@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Web.Http;
 using UIWebApi.Filters;
 using UIWebApi.Models;
+using WebApiApp.Filters;
 
 namespace UIWebApi.Controllers
 {
@@ -24,7 +25,6 @@ namespace UIWebApi.Controllers
         {
             _educationService = educationService;
         }
-
         [HttpGet]
         [Route("{userId}/education")]
         public IHttpActionResult GetByProfileId(string userId)
@@ -36,42 +36,53 @@ namespace UIWebApi.Controllers
             }
             catch (ValidationException ex)
             {
-                ModelState.AddModelError(ex.Property, ex.Message);
-                return BadRequest(ModelState);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
             }
             return Ok(education);
         }
 
+        [ModelValidation]
         [AccessActionFilter]
         [HttpPost]
         [Route("{userId}/education")]
         public IHttpActionResult AddEducationProgrammer(string userId, [FromBody]EducationModel education)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                _educationService.Insert(Mapper.Map<EducationModel, EducationDTO>(education));
             }
-            _educationService.Insert(Mapper.Map<EducationModel, EducationDTO>(education));
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
             return Ok(new { Message = "Education added successfully!" });
         }
 
+        [ModelValidation]
         [AccessActionFilter]
         [Route("{userId}/education/{educationId}")]
         [HttpPut]
         public IHttpActionResult UpdateEducationProgrammer(string userId, int educationId, [FromBody]EducationModel education)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             try
             {
                 _educationService.Update(educationId, Mapper.Map<EducationModel, EducationDTO>(education));
             }
             catch (ValidationException ex)
             {
-                ModelState.AddModelError(ex.Property, ex.Message);
-                return BadRequest(ModelState);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
             }
             return Ok(new { Message = "Education updated successfully!" });
         }
@@ -87,8 +98,11 @@ namespace UIWebApi.Controllers
             }
             catch (ValidationException ex)
             {
-                ModelState.AddModelError(ex.Property, ex.Message);
-                return BadRequest(ModelState);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
             }
             return Ok(new { Message = "Education deleted successfully!" });
         }

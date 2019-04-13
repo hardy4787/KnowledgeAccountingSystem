@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.Web.Http;
 using UIWebApi.Filters;
 using UIWebApi.Models;
+using WebApiApp.Filters;
 
 namespace UIWebApi.Controllers
 {
@@ -38,47 +39,51 @@ namespace UIWebApi.Controllers
                 ModelState.AddModelError(ex.Property, ex.Message);
                 return BadRequest(ModelState);
             }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
             return Ok(workExperience);
         }
 
+        [ModelValidation]
         [AccessActionFilter]
         [Route("{userId}/work-experience")]
         [HttpPost]
         public IHttpActionResult AddWorkExperience(string userId, [FromBody]WorkExperienceModel workExperience)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             try
             {
                 _workExperienceService.Insert(Mapper.Map<WorkExperienceModel, WorkExperienceDTO>(workExperience));
             }
             catch (ValidationException ex)
             {
-                ModelState.AddModelError(ex.Property, ex.Message);
-                return BadRequest(ModelState);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
             }
             return Ok(new { Message = "Work experience added successfully!" });
         }
 
+        [ModelValidation]
         [AccessActionFilter]
         [HttpPut]
         [Route("{id}/work-experience/{workExperienceId}")]
         public IHttpActionResult UpdateWorkExperience(string userId, int workExperienceId, [FromBody]WorkExperienceModel workExperience)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             try
             {
                 _workExperienceService.Update(workExperienceId, Mapper.Map<WorkExperienceModel, WorkExperienceDTO>(workExperience));
             }
             catch (ValidationException ex)
             {
-                ModelState.AddModelError(ex.Property, ex.Message);
-                return BadRequest(ModelState);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
             }
             return Ok(new { Message = "Work experience updated successfully!" });
         }
@@ -94,8 +99,11 @@ namespace UIWebApi.Controllers
             }
             catch (ValidationException ex)
             {
-                ModelState.AddModelError(ex.Property, ex.Message);
-                return BadRequest(ModelState);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
             }
             return Ok(new { Message = "Work experience deleted successfully!" });
         }

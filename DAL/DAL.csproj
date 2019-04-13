@@ -58,9 +58,9 @@
     <Compile Include="Configurations\ProjectConfiguration.cs" />
     <Compile Include="Configurations\ProgrammerSkillConfiguration.cs" />
     <Compile Include="Configurations\ProfileConfiguration.cs" />
+    <Compile Include="Configurations\SkillConfiguration.cs" />
     <Compile Include="Configurations\WorkExperienceConfiguration.cs" />
     <Compile Include="EF\KnowledgeAccountingContext.cs" />
-    <Compile Include="EF\MigrationsContextFactory.cs" />
     <Compile Include="Entities\ApplicationRole.cs" />
     <Compile Include="Entities\ApplicationUser.cs" />
     <Compile Include="Entities\Education.cs" />

@@ -39,6 +39,8 @@ namespace BLL.Services
 
         public void Insert(WorkExperienceDTO workExperienceDTO)
         {
+            if (workExperienceDTO == null)
+                throw new ValidationException("Work experience is not supported by information.", "Id");
             var workExperience = Database.WorkExperiences.Get(workExperienceDTO.Id);
             if(workExperience != null)
                 throw new ValidationException("Work experience with this id already exists", "Id");
@@ -48,6 +50,8 @@ namespace BLL.Services
 
         public void Update(int workExperienceId, WorkExperienceDTO workExperienceDTO)
         {
+            if (workExperienceDTO == null)
+                throw new ValidationException("Work experience is not supported by information.", "Id");
             if (workExperienceId != workExperienceDTO.Id)
                 throw new ValidationException("Skill's id don't match", "Id");
             var workExperience = Database.WorkExperiences.Get(workExperienceDTO.Id);

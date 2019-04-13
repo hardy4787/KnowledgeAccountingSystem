@@ -13,7 +13,7 @@ namespace BLL.Interfaces
         void Update(string userId, ProgrammerProfileDTO item);
         void UpdateImageProfileUrl(string url, string fileType, int fileSize, string id);
         IEnumerable<ProgrammerProfileDTO> GetProgrammersBySkill(int? idSkill, int knowledgeLevel);
-        byte[] GenerateReport(IEnumerable<ProgrammerProfileDTO> profiles);
+        byte[] GenerateReport(List<ProgrammerProfileDTO> profiles);
 
     }
 }

@@ -29,6 +29,7 @@ namespace DAL.EF
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new ProfileConfiguration());
+            modelBuilder.Configurations.Add(new SkillConfiguration());
             modelBuilder.Configurations.Add(new EducationConfiguration());
             modelBuilder.Configurations.Add(new ProjectConfiguration());
             modelBuilder.Configurations.Add(new WorkExperienceConfiguration());

@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using UIWebApi.Models;
+using WebApiApp.Filters;
 
 namespace UIWebApi.Controllers
 {
@@ -25,28 +26,37 @@ namespace UIWebApi.Controllers
         }
 
         [Route("profiles")]
-        public IEnumerable<ProfileModel> GetProfilesBySkill(int? skillId, int knowledgeLevel)
+        public IHttpActionResult GetProfilesBySkill(int? skillId, int knowledgeLevel)
         {
-            return Mapper.Map<IEnumerable<ProgrammerProfileDTO>, IEnumerable<ProfileModel>>(_profileService.GetProgrammersBySkill(skillId, knowledgeLevel));
-        }
-
-        [Route("profiles/{skillId}/{knowledgeLevel}/create-report")]
-        [HttpPost]
-        public HttpResponseMessage CreateReport(IEnumerable<ProfileModel> profiles)
-        {
-            if (!ModelState.IsValid)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
-            }
-            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+            IEnumerable<ProfileModel> profiles;
             try
             {
-                response.Content = new ByteArrayContent(_profileService.GenerateReport(Mapper.Map<IEnumerable<ProfileModel>, IEnumerable<ProgrammerProfileDTO>>(profiles)));
+                profiles =  Mapper.Map<IEnumerable<ProgrammerProfileDTO>, IEnumerable<ProfileModel>>(_profileService.GetProgrammersBySkill(skillId, knowledgeLevel));
             }
             catch (ValidationException ex)
             {
-                ModelState.AddModelError(ex.Property, ex.Message);
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
+            return Ok(profiles);
+        }
+
+        [ModelValidation]
+        [Route("profiles/{skillId}/{knowledgeLevel}/create-report")]
+        [HttpPost]
+        public HttpResponseMessage CreateReport(List<ProfileModel> profiles)
+        {
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+            try
+            {
+                response.Content = new ByteArrayContent(_profileService.GenerateReport(Mapper.Map<List<ProfileModel>, List<ProgrammerProfileDTO>>(profiles)));
+            }
+            catch (ValidationException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
             }
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {

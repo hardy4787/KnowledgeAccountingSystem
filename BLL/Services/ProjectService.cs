@@ -30,6 +30,8 @@ namespace BLL.Services
 
         public void Insert(ProjectDTO projectDTO)
         {
+            if (projectDTO == null)
+                throw new ValidationException("Project is not supported by information.", "Id");
             var project = Database.Projects.Get(projectDTO.Id);
             if (project != null)
                 throw new ValidationException("Project with this id already exists", "Id");
@@ -39,11 +41,14 @@ namespace BLL.Services
 
         public void Update(int projectId, ProjectDTO projectDTO)
         {
+            if (projectDTO == null)
+                throw new ValidationException("Project is not supported by information.", "Id");
             if (projectId != projectDTO.Id)
                 throw new ValidationException("Project's id don't match", "Id");
-            var project = Database.Skills.Get(projectDTO.Id);
+            var project = Database.Projects.Get(projectDTO.Id);
             if (project == null)
-                Database.Projects.Update(Mapper.Map<ProjectDTO, Project>(projectDTO));
+                throw new ValidationException("Project hasn't found", "Id");
+            Database.Projects.Update(Mapper.Map<ProjectDTO, Project>(projectDTO));
             Database.Save();
         }
 

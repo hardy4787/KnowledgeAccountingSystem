@@ -30,6 +30,8 @@ namespace BLL.Services
           
         public void Insert(EducationDTO educationDTO)
         {
+            if(educationDTO == null)
+                throw new ValidationException("Education is not supported by information.", "Id");
             var education = Database.Educations.Get(educationDTO.Id);
             if (education != null)
                 throw new ValidationException("Education with this id already exists", "Id");
@@ -39,6 +41,8 @@ namespace BLL.Services
 
         public void Update(int educationId, EducationDTO educationDTO)
         {
+            if (educationDTO == null)
+                throw new ValidationException("Education is not supported by information.", "Id");
             if (educationId != educationDTO.Id)
                 throw new ValidationException("Education's id don't match", "Id");
             var education = Database.Educations.Get(educationDTO.Id);

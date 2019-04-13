@@ -14,7 +14,6 @@ namespace UIWebApi
 
             GlobalConfiguration.Configure(WebApiConfig.Register);
 
-            // внедрение зависимостей
             NinjectModule registrations = new NinjectRegistrations();
             var kernel = new StandardKernel(registrations);
             var ninjectResolver = new NinjectDependencyResolver(kernel);

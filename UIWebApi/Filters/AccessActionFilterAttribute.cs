@@ -15,7 +15,7 @@ namespace UIWebApi.Filters
         public override void OnActionExecuting(HttpActionContext filterContext)
         {
             ClaimsIdentity claimsIdentity = HttpContext.Current.User.Identity as ClaimsIdentity;
-            if(filterContext.ActionArguments["userId"].ToString() != claimsIdentity.FindFirst("Id").Value)
+            if (filterContext.ActionArguments["userId"].ToString() != claimsIdentity.FindFirst("Id").Value)
                 filterContext.Response = filterContext.Request.CreateErrorResponse(System.Net.HttpStatusCode.Forbidden, "You do not have access to this action");
             base.OnActionExecuting(filterContext);
         }
