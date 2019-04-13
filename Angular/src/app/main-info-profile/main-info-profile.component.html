@@ -8,7 +8,8 @@
   <div class="col-lg-4 ml-4 mr-4">
     <div class="text-center card">
       <div class="card-body">
-          <img [src]="sanitize(setImageProfile())" class="rounded mx-auto d-block img-avatar" style="width:200px; height:200px;">
+        <img [src]="sanitize(setImageProfile())" class="rounded mx-auto d-block img-avatar"
+          style="width:200px; height:200px;">
         <div class="mt-2">
           <button data-toggle="modal" (click)="imageProfileModal.show()" data-target="#imageProfileModal"
             class="btn btn-sm btn-outline-warning" [hidden]="roleService.userMatch()">Change</button>
@@ -55,7 +56,8 @@
   </div>
 </div>
 
-<div class="modal fade" bsModal #mainInfoModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="mainInfoModal">
+<div class="modal fade" bsModal #mainInfoModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog"
+  aria-labelledby="mainInfoModal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -70,16 +72,23 @@
             <input type="hidden" name="ImageProfileUrl" #ImageProfileUrl="ngModel"
               [(ngModel)]="service.formData.ImageProfileUrl">
             <div class="form-group">
-              <label data-error="Required field!" >Full Name</label>
+              <label data-error="Required field!">Full Name</label>
               <input type="text" class="form-control" maxlength="64" name="FullName" #FullName="ngModel"
-                [(ngModel)]="service.formData.FullName" required>
+                [(ngModel)]="service.formData.FullName" required checkspaces>
               <div class="validation-error" *ngIf="FullName.invalid && FullName.touched">This field is required</div>
             </div>
             <div class="form-group">
               <label>Age</label>
-              <input type="number" class="form-control" max="120" min="10" name="Age" #Age="ngModel" [(ngModel)]="service.formData.Age"
-                required>
-              <div class="validation-error" *ngIf="Age.invalid && Age.touched">This field is required</div>
+              <input type="number" class="form-control" min="15" max="100" name="Age" #Age="ngModel"
+                [(ngModel)]="service.formData.Age" required>
+              <div *ngIf="Age.invalid && (Age.dirty || Age.touched)" class="validation-error">
+                <div *ngIf="Age.errors.required">
+                  Age is required.
+                </div>
+                <div *ngIf="Age.errors.min || Age.errors.max">
+                  Enter the correct age.
+                </div>
+              </div>
             </div>
             <div class="form-group">
               <label>Email</label>
@@ -89,21 +98,21 @@
             </div>
             <div class="form-group">
               <label>Phone</label>
-              <input type="telephone" class="form-control" maxlength="64" name="Phone" #Phone="ngModel" [(ngModel)]="service.formData.Phone"
-                required pattern="[0-9]+">
+              <input type="telephone" class="form-control" maxlength="64" name="Phone" #Phone="ngModel"
+                [(ngModel)]="service.formData.Phone" required pattern="[0-9]+">
               <div class="validation-error" *ngIf="Phone.invalid && Phone.touched">Invalid phone</div>
             </div>
 
             <div class="form-group">
               <label>GitHub</label>
               <input type="text" class="form-control" maxlength="64" name="GitHub" #GitHub="ngModel"
-                [(ngModel)]="service.formData.GitHub" required>
+                [(ngModel)]="service.formData.GitHub" required deletespaces>
               <div class="validation-error" *ngIf="GitHub.invalid && GitHub.touched">This field is required</div>
             </div>
             <div class="form-group">
               <label>Address</label>
               <input type="text" class="form-control" maxlength="64" name="Address" #Address="ngModel"
-                [(ngModel)]="service.formData.Address" required>
+                [(ngModel)]="service.formData.Address" required checkspaces>
               <div class="validation-error" *ngIf="Address.invalid && Address.touched">This field is required</div>
             </div>
             <div class="modal-footer">
@@ -118,12 +127,13 @@
 </div>
 
 <div class="modal fade" bsModal #imageProfileModal="bs-modal" tabindex="-1" role="dialog"
-  aria-labelledby="imageProfileModal" aria-hidden="true">
+  aria-labelledby="imageProfileModal" aria-hidden="true" [config]="{backdrop: 'static'}"
+  (onHide)="handlerCloseModal(Image)">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="imageProfileModalLabel">Edit photo of profile</h5>
-        <button class="close" type="button" (click)="imageProfileModal.hide();" aria-label="Close">
+        <button class="close" type="button" (click)="Image.value = null; imageProfileModal.hide();" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -131,16 +141,15 @@
         <div class="container-fluid">
           <form class="col-sm-12" #imageProfileForm="ngForm" (ngSubmit)="OnImageProfileSubmit(Image)">
             <div class="image-file">
-              <input type="file" #Image accept="image/*" (change)="handleFileInput($event.target.files)"
-                class="custom-file-input" id="imageProfileFile">
+              <input type="file" #Image name="Image" accept="image/*"
+                (change)="handleFileInput($event.target.files, Image)" class="custom-file-input" id="imageProfileFile">
               <label class="custom-file-label" for="imageProfileFile">Choose file</label>
-              <div class="mt-2"><img [src]="modalImageUrl" class="rounded mx-auto d-block"
+              <div class="mt-2"><img *ngIf="modalImageUrl!=null" [src]="modalImageUrl" class="rounded mx-auto d-block"
                   style="width:200px; height:200px;"></div>
             </div>
             <div class="modal-footer">
               <button [disabled]="Image.value=='' || !imageProfileForm.valid" type="submit"
                 class="btn btn-primary">Save</button>
-              <button class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
           </form>
         </div>

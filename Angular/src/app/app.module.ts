@@ -38,6 +38,10 @@ import { WorkExperienceService } from './shared/work-experience/work-experience.
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { SkillComponent } from './skill/skill.component';
 import { ProfilesComponent } from './profiles/profiles.component';
+import { DeleteSpacesDirective } from './directives/deleteSpaces.directive';
+import { CheckSpacesDirective } from './directives/checkSpaces.directive';
+import { MinDirective } from './directives/min.directive';
+import { MaxDirective } from './directives/max.directive';
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,14 +52,16 @@ import { ProfilesComponent } from './profiles/profiles.component';
     MainInfoProfileComponent,
     EducationComponent,
     ProgrammerSkillComponent,
-    SkillComponent,
+    SkillComponent,MinDirective,
+    CheckSpacesDirective,
+    DeleteSpacesDirective,
     ProjectComponent,
     ManagerComponent,
     ForbiddenComponent,
     NotFoundComponent,
     WorkExperienceComponent,
     ProfilesComponent,
-    
+    MaxDirective
   ],
   imports: [
     BrowserModule,

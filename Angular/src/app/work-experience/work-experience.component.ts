@@ -21,7 +21,7 @@ export class WorkExperienceComponent implements OnInit {
       {
         containerClass : 'theme-dark-blue',
         dateInputFormat : 'YYYY-MM-DD'
-      });
+      }); 
   }
 
   ngOnInit() {

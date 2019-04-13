@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ManagerService } from '../shared/manager/manager.service';
 import { SkillService } from '../shared/skill/skill.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { saveAs } from 'file-saver';
 
