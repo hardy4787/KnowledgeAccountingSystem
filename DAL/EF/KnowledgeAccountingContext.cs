@@ -215,29 +215,6 @@ namespace DAL.EF
                 new ProgrammerProfile{ Id = "3", FullName = "Ukolov Nazar", Age = 25, Address = "Lviv", Email = "ukolov@gmail.com", GitHub = "ukolov777", Phone = "0672155745", ImageProfileUrl = "/assets/image-profiles/sdasdasd.png"},
                 new ProgrammerProfile{ Id = "4", FullName = "Yarkulov Nazar", Age = 27, Address = "Kharkiv", Email = "yarkulov@gmail.com", GitHub = "yarkulov123", Phone = "0672155712", ImageProfileUrl = "/assets/image-profiles/unnamed.png"},
             };
-            //List<ProgrammerProfile> programmerProfiles = new List<ProgrammerProfile>
-            //{
-            //    new ProgrammerProfile{ Id = "1", FullName = "Hristich Bogdan", Age = 21, Address = "Kiev", Email = "hristich@gmail.com", GitHub = "hardy4787", Phone = "0671605738", ImageProfileUrl = "/assets/image-profiles/fdfsdaf.png",
-            //    Educations = new List<Education>{ educations[0] },
-            //    Projects = new List<Project>{projects[0], projects[1] },
-            //    WorkExperiences = new List<WorkExperience>{workExperiences[0], workExperiences[1] },
-            //    ProgrammerSkills = new List<ProgrammerSkill>{ programmerSkills[0], programmerSkills[1] } },
-            //    new ProgrammerProfile{ Id = "2", FullName = "Basenko Ivan", Age = 21, Address = "Kiev", Email = "basenko@gmail.com", GitHub = "chebyrek", Phone = "0960635124", ImageProfileUrl = "/assets/image-profiles/fsdfdsffdsf.png",
-            //    Educations = new List<Education>{ educations[1] },
-            //    Projects = new List<Project>{projects[2], projects[3] },
-            //    WorkExperiences = new List<WorkExperience>{workExperiences[2] },
-            //    ProgrammerSkills = new List<ProgrammerSkill>{ programmerSkills[2], programmerSkills[3], programmerSkills[4] } },
-            //    new ProgrammerProfile{ Id = "3", FullName = "Ukolov Nazar", Age = 25, Address = "Lviv", Email = "ukolov@gmail.com", GitHub = "ukolov777", Phone = "0672155745", ImageProfileUrl = "/assets/image-profiles/sdasdasd.png",
-            //    Educations = new List<Education>{ educations[2] },
-            //    Projects = new List<Project>{projects[3], projects[4] },
-            //    WorkExperiences = null,
-            //    ProgrammerSkills = new List<ProgrammerSkill>{ programmerSkills[5], programmerSkills[6], programmerSkills[7] } },
-            //    new ProgrammerProfile{ Id = "4", FullName = "Yarkulov Nazar", Age = 27, Address = "Kharkiv", Email = "yarkulov@gmail.com", GitHub = "yarkulov123", Phone = "0672155712", ImageProfileUrl = "/assets/image-profiles/unnamed.png",
-            //    Educations = new List<Education>{ educations[3],educations[4] },
-            //    Projects = new List<Project>{projects[5], projects[6] },
-            //    WorkExperiences = new List<WorkExperience>{workExperiences[3], workExperiences[4], workExperiences[5] },
-            //    ProgrammerSkills = new List<ProgrammerSkill>{ programmerSkills[8], programmerSkills[9] , programmerSkills[10], programmerSkills[11], programmerSkills[12] } },
-            //};
 
             foreach (ProgrammerProfile programmerProfile in programmerProfiles)
                 db.ProgrammerProfiles.Add(programmerProfile);
@@ -247,52 +224,3 @@ namespace DAL.EF
         }
     }
 }
-//#region ApplicationUser
-//modelBuilder.Entity<ProgrammerProfile>()
-//                .HasRequired(c => c.ApplicationUser)
-//                .WithOptional(c => c.ProgrammerProfile);
-//#endregion
-
-//#region ProgrammerProfile
-//modelBuilder.Entity<ProgrammerProfile>().Property(p => p.FullName).IsRequired();
-//modelBuilder.Entity<ProgrammerProfile>().Property(p => p.FullName).HasMaxLength(40);
-//#endregion
-
-//#region ProgrammerSkill
-//modelBuilder.Entity<ProgrammerSkill>().HasKey(p => new { p.ProgrammerId, p.SkillId });
-
-//            modelBuilder.Entity<ProgrammerSkill>()
-//           .HasRequired(t => t.Skill)
-//           .WithMany(t => t.ProgrammerSkills)
-//           .HasForeignKey(t => t.SkillId);
-
-//modelBuilder.Entity<ProgrammerSkill>()
-//            .HasRequired(t => t.ProgrammerProfile)
-//            .WithMany(t => t.ProgrammerSkills)
-//            .HasForeignKey(t => t.ProgrammerId);
-//#endregion
-
-//#region Education
-
-//modelBuilder.Entity<Education>()
-//                .HasRequired(x => x.ProgrammerProfile)
-//                .WithMany(x => x.Educations)
-//                .HasForeignKey(x => x.ProgrammerId);
-//#endregion
-
-//#region Project
-
-//modelBuilder.Entity<Project>()
-//                .HasRequired(x => x.ProgrammerProfile)
-//                .WithMany(x => x.Projects)
-//                .HasForeignKey(x => x.ProgrammerId);
-//#endregion
-
-//#region WorkExperience
-//modelBuilder.Entity<WorkExperience>()
-//                .HasRequired(x => x.ProgrammerProfile)
-//                .WithMany(x => x.WorkExperiences)
-//                .HasForeignKey(x => x.ProgrammerId);
-//            #endregion
-
-//            base.OnModelCreating(modelBuilder);

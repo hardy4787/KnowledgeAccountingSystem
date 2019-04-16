@@ -32,9 +32,9 @@ namespace UIWebApi.Controllers
             {
                 profile = _profileService.Get(userId);
             }
-            catch (ValidationException ex)
+            catch (ValidationException)
             {
-                return BadRequest(ex.Message);
+                return NotFound();
             }
             catch (Exception)
             {
@@ -42,9 +42,10 @@ namespace UIWebApi.Controllers
             }
             return Ok(Mapper.Map<ProgrammerProfileDTO, ProfileModel>(profile));
         }
+        [ModelValidation]
         [AccessActionFilter]
-        [Route("{userId}")]
         [HttpPut]
+        [Route("{userId}")]
         public IHttpActionResult UpdateMainInfoProfile(string userId, [FromBody]ProfileModel profile)
         {
             try

@@ -33,9 +33,9 @@ namespace UIWebApi.Controllers
             {
                 projects = Mapper.Map<IEnumerable<ProjectDTO>, IEnumerable<ProjectModel>>(_projectService.GetProjectsByProfileId(userId));
             }
-            catch (ValidationException ex)
+            catch (ValidationException)
             {
-                return BadRequest(ex.Message);
+                return NotFound();
             }
             catch (Exception)
             {

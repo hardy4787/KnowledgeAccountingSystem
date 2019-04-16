@@ -33,9 +33,9 @@ namespace UIWebApi.Controllers
             {
                 profiles =  Mapper.Map<IEnumerable<ProgrammerProfileDTO>, IEnumerable<ProfileModel>>(_profileService.GetProgrammersBySkill(skillId, knowledgeLevel));
             }
-            catch (ValidationException ex)
+            catch (ValidationException)
             {
-                return BadRequest(ex.Message);
+                return NotFound();
             }
             catch (Exception)
             {

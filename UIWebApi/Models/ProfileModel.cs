@@ -10,19 +10,20 @@ namespace UIWebApi.Models
     {
         public string Id { get; set; }
         [Required]
+        [MaxLength(64)]
         public string FullName { get; set; }
         [Required]
-        [MaxLength(64)]
         public int Age { get; set; }
         [Required]
         [MaxLength(64)]
         public string Email { get; set; }
         [MaxLength(64)]
         public string Address { get; set; }
-        public string ImageProfileUrl { get; set; }
         [MaxLength(64)]
         public string Phone { get; set; }
         [MaxLength(64)]
         public string GitHub { get; set; }
+        public string ImageProfileUrl { get; set; }
     }
 }
+    

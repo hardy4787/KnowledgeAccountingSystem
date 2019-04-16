@@ -38,7 +38,7 @@ namespace UIWebApi.Providers
                 AuthenticationTicket ticket = new AuthenticationTicket(identity, additionalData);
                 context.Validated(ticket);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 context.SetError("Server", "Server is not responding.");
                 return;

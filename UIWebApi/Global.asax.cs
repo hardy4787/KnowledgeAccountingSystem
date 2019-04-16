@@ -16,8 +16,7 @@ namespace UIWebApi
 
             NinjectModule registrations = new NinjectRegistrations();
             var kernel = new StandardKernel(registrations);
-            var ninjectResolver = new NinjectDependencyResolver(kernel);
-            GlobalConfiguration.Configuration.DependencyResolver = ninjectResolver;
+            GlobalConfiguration.Configuration.DependencyResolver = new NinjectDependencyResolver(kernel);
         }
     }
 }

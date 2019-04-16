@@ -9,43 +9,30 @@ namespace Util.Ninject
 {
     public class NinjectDependencyScope : IDependencyScope
     {
-        private IResolutionRoot resolver;
+        private IResolutionRoot _resolver;
 
         internal NinjectDependencyScope(IResolutionRoot resolver)
         {
-            Contract.Assert(resolver != null);
-
-            this.resolver = resolver;
-        }
-        public void Dispose()
-        {
-            var disposable = this.resolver as IDisposable;
-            if (disposable != null)
-            {
-                disposable.Dispose();
-            }
-
-            this.resolver = null;
+            this._resolver = resolver;
         }
 
         public object GetService(Type serviceType)
         {
-            if (this.resolver == null)
-            {
-                throw new ObjectDisposedException("this", "This scope has already been disposed");
-            }
-
-            return this.resolver.TryGet(serviceType);
+            return this._resolver.TryGet(serviceType);
         }
 
         public IEnumerable<object> GetServices(Type serviceType)
         {
-            if (this.resolver == null)
+            return this._resolver.GetAll(serviceType);
+        }
+        public void Dispose()
+        {
+            var disposable = this._resolver as IDisposable;
+            if (disposable != null)
             {
-                throw new ObjectDisposedException("this", "This scope has already been disposed");
+                disposable.Dispose();
             }
-
-            return this.resolver.GetAll(serviceType);
+            this._resolver = null;
         }
     }
 }

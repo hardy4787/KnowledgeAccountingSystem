@@ -32,12 +32,11 @@ namespace UIWebApi.Controllers
             IEnumerable<ProgrammerSkillModel> skills;
             try
             {
-                if (userId == null) throw new ValidationException("Id", "Id can't be null");
                 skills = Mapper.Map<IEnumerable<ProgrammerSkillDTO>, IEnumerable<ProgrammerSkillModel>>(_skillService.GetSkillsOfProgrammer(userId));
             }
-            catch (ValidationException ex)
+            catch (ValidationException)
             {
-                return BadRequest(ex.Message);
+                return NotFound();
             }
             catch (Exception)
             {
@@ -58,7 +57,7 @@ namespace UIWebApi.Controllers
             }
             catch (ValidationException ex)
             {
-                return BadRequest(ex.Message);
+                return NotFound();
             }
             catch (Exception)
             {

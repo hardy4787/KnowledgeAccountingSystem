@@ -35,9 +35,9 @@ namespace UIWebApi.Controllers
             {
                 skills = Mapper.Map<IEnumerable<SkillDTO>, IEnumerable<SkillModel>>(_skillService.GetSkills());
             }
-            catch (ValidationException ex)
+            catch (ValidationException)
             {
-                return BadRequest(ex.Message);
+                return NotFound();
             }
             catch (Exception)
             {

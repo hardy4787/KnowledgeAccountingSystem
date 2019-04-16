@@ -15,11 +15,11 @@ namespace Util.Ninject
     {
         public override void Load()
         {
-            Bind<IProgrammerProfileService>().To<ProgrammerProfileService>().InSingletonScope();
-            Bind<ISkillService>().To<SkillService>().InSingletonScope();
-            Bind<IWorkExperienceService>().To<WorkExperienceService>().InSingletonScope();
-            Bind<IEducationService>().To<EducationService>().InSingletonScope();
-            Bind<IProjectService>().To<ProjectService>().InSingletonScope();
+            Bind<IProgrammerProfileService>().To<ProgrammerProfileService>();
+            Bind<ISkillService>().To<SkillService>();
+            Bind<IWorkExperienceService>().To<WorkExperienceService>();
+            Bind<IEducationService>().To<EducationService>();
+            Bind<IProjectService>().To<ProjectService>();
             Bind<IUnitOfWork>().To<EFUnitOfWork>().WithConstructorArgument("DefaultConnection");
         }
     }

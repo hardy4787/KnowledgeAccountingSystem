@@ -19,13 +19,7 @@ namespace UIWebApi.Controllers
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
-        public IUserService UserService
-        {
-            get
-            {
-                return Request.GetOwinContext().GetUserManager<IUserService>();
-            }
-        }
+        public IUserService UserService => Request.GetOwinContext().GetUserManager<IUserService>();
 
         [ModelValidation]
         [AllowAnonymous]

@@ -14,7 +14,7 @@ namespace UIWebApi.Models
         [MaxLength(64)]
         public string NameInstitution { get; set; }
         [Required]
-        public DateTime? EntryDate { get; set; }
+        public DateTime EntryDate { get; set; }
         public DateTime? CloseDate { get; set; }
         [Required]
         public string ProgrammerId { get; set; }

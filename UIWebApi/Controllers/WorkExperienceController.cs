@@ -34,10 +34,9 @@ namespace UIWebApi.Controllers
             {
                 workExperience = Mapper.Map<IEnumerable<WorkExperienceDTO>, IEnumerable<WorkExperienceModel>>(_workExperienceService.GetWorkExperienceByProfileId(userId));
             }
-            catch (ValidationException ex)
+            catch (ValidationException)
             {
-                ModelState.AddModelError(ex.Property, ex.Message);
-                return BadRequest(ModelState);
+                return NotFound();
             }
             catch (Exception)
             {
@@ -48,8 +47,8 @@ namespace UIWebApi.Controllers
 
         [ModelValidation]
         [AccessActionFilter]
-        [Route("{userId}/work-experience")]
         [HttpPost]
+        [Route("{userId}/work-experience")]
         public IHttpActionResult AddWorkExperience(string userId, [FromBody]WorkExperienceModel workExperience)
         {
             try
@@ -70,7 +69,7 @@ namespace UIWebApi.Controllers
         [ModelValidation]
         [AccessActionFilter]
         [HttpPut]
-        [Route("{id}/work-experience/{workExperienceId}")]
+        [Route("{userId}/work-experience/{workExperienceId}")]
         public IHttpActionResult UpdateWorkExperience(string userId, int workExperienceId, [FromBody]WorkExperienceModel workExperience)
         {
             try
