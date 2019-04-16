@@ -44,15 +44,17 @@ export class SkillComponent implements OnInit {
       this.toastr.warning(data.Message)
       this.service.getSkills();
     },
-    (error: HttpErrorResponse) => {
-      if (error.status === 400) {
-        for (var key in error.error.ModelState)
-          for (var i = 0; i < error.error.ModelState[key].length; i++)
-            this.toastr.error(error.error.ModelState[key][i]);
-      } else {
-        this.toastr.error("Cannot updated a skill!");
-      }
-    });
+      (error: HttpErrorResponse) => {
+        if (error.status === 400 && error.error.ModelState !== undefined) {
+          for (var key in error.error.ModelState)
+            for (var i = 0; i < error.error.ModelState[key].length; i++)
+              this.toastr.error(error.error.ModelState[key][i]);
+        } else if (error.status === 400) {
+          this.toastr.error(error.error.Message);
+        } else {
+          this.toastr.error("Cannot updated a skill!");
+        }
+      });
   }
 
   insertSkill(form: NgForm) {
@@ -62,10 +64,12 @@ export class SkillComponent implements OnInit {
       this.service.getSkills();
     },
       (error: HttpErrorResponse) => {
-        if (error.status === 400) {
+        if (error.status === 400 && error.error.ModelState !== undefined) {
           for (var key in error.error.ModelState)
             for (var i = 0; i < error.error.ModelState[key].length; i++)
               this.toastr.error(error.error.ModelState[key][i]);
+        } else if (error.status === 400) {
+          this.toastr.error(error.error.Message);
         } else {
           this.toastr.error("Cannot inserted a skill!");
         }
@@ -78,9 +82,7 @@ export class SkillComponent implements OnInit {
     },
       (error: HttpErrorResponse) => {
         if (error.status === 400) {
-          for (var key in error.error.ModelState)
-            for (var i = 0; i < error.error.ModelState[key].length; i++)
-              this.toastr.error(error.error.ModelState[key][i]);
+          this.toastr.error(error.error.Message);
         } else {
           this.toastr.error("Cannot deleted a skill!");
         }

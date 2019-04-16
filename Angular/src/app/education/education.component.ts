@@ -17,11 +17,11 @@ export class EducationComponent implements OnInit {
   datePickerConfig: Partial<BsDatepickerConfig>;
   @ViewChild('educationModal') public educationModal: ModalDirective;
   education: Education = new Education();
-  constructor(private service : EducationService, private roleService : RoleService, private toastr : ToastrService) {
+  constructor(private service: EducationService, private roleService: RoleService, private toastr: ToastrService) {
     this.datePickerConfig = Object.assign({},
       {
-        containerClass : 'theme-dark-blue',
-        dateInputFormat : 'YYYY-MM-DD'
+        containerClass: 'theme-dark-blue',
+        dateInputFormat: 'YYYY-MM-DD'
       });
   }
 
@@ -29,76 +29,78 @@ export class EducationComponent implements OnInit {
     this.service.refreshInfo();
   }
 
-  resetForm(form? : NgForm){
-    if(form!=null)
+  resetForm(form?: NgForm) {
+    if (form != null)
       form.resetForm();
     this.service.formData = {
-      Id : null,
-      Level : '',
-      NameInstitution : '',
-      EntryDate : null,
-      CloseDate : null,
-      ProgrammerId : null
+      Id: null,
+      Level: '',
+      NameInstitution: '',
+      EntryDate: null,
+      CloseDate: null,
+      ProgrammerId: null
     }
   }
 
-  populateForm(education : Education){
-    this.service.formData = Object.assign({},education);
+  populateForm(education: Education) {
+    this.service.formData = Object.assign({}, education);
   }
 
-  onSubmit(form : NgForm){
+  onSubmit(form: NgForm) {
     this.educationModal.hide();
-    if(form.value.Id == null)
+    if (form.value.Id == null)
       this.insertEducation(form);
     else
       this.updateRecord(form);
-  } 
-  
-  updateRecord(form:NgForm){
-    this.service.putInfo(form.value).subscribe((data:any) =>{
+  }
+
+  updateRecord(form: NgForm) {
+    this.service.putInfo(form.value).subscribe((data: any) => {
       this.toastr.warning(data.Message)
       this.service.refreshInfo();
     },
-    (error: HttpErrorResponse) => {
-      if (error.status === 400) {
-        for (var key in error.error.ModelState)
-          for (var i = 0; i < error.error.ModelState[key].length; i++)
-            this.toastr.error(error.error.ModelState[key][i]);
-      } else {
-        this.toastr.error("Cannot updated an skill!");
-      }
-    });
+      (error: HttpErrorResponse) => {
+        if (error.status === 400 && error.error.ModelState !== undefined) {
+          for (var key in error.error.ModelState)
+            for (var i = 0; i < error.error.ModelState[key].length; i++)
+              this.toastr.error(error.error.ModelState[key][i]);
+        } else if (error.status === 400) {
+          this.toastr.error(error.error.Message);
+        } else {
+          this.toastr.error("Cannot updated an skill!");
+        }
+      });
   }
 
-  insertEducation(form: NgForm){
-    this.service.postEducation(form.value).subscribe((data:any)=>{
-    this.toastr.success(data.Message);
-    this.service.refreshInfo();
+  insertEducation(form: NgForm) {
+    this.service.postEducation(form.value).subscribe((data: any) => {
+      this.toastr.success(data.Message);
+      this.service.refreshInfo();
     },
-    (error: HttpErrorResponse) => {
-      if (error.status === 400) {
-        for (var key in error.error.ModelState)
-          for (var i = 0; i < error.error.ModelState[key].length; i++)
-            this.toastr.error(error.error.ModelState[key][i]);
-      } else {
-        this.toastr.error("Cannot inserted an education!");
-      }
-    });
+      (error: HttpErrorResponse) => {
+        if (error.status === 400 && error.error.ModelState !== undefined) {
+          for (var key in error.error.ModelState)
+            for (var i = 0; i < error.error.ModelState[key].length; i++)
+              this.toastr.error(error.error.ModelState[key][i]);
+        } else if (error.status === 400) {
+          this.toastr.error(error.error.Message);
+        } else {
+          this.toastr.error("Cannot inserted an education!");
+        }
+      });
   }
 
-  onDelete(id : number){
-    this.service.deleteEducation(id).subscribe((data:any)=>{
-    this.toastr.warning(data.Message)
-    this.service.refreshInfo();
+  onDelete(id: number) {
+    this.service.deleteEducation(id).subscribe((data: any) => {
+      this.toastr.warning(data.Message)
+      this.service.refreshInfo();
     },
-    (error: HttpErrorResponse) => {
-      if (error.status === 400) {
-        for (var key in error.error.ModelState)
-          for (var i = 0; i < error.error.ModelState[key].length; i++)
-            this.toastr.error(error.error.ModelState[key][i]);
-      } else {
-        this.toastr.error("Cannot deleted an education!");
-      }
-    });
+      (error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          this.toastr.error(error.error.Message);
+        } else {
+          this.toastr.error("Cannot deleted an education!");
+        }
+      });
   }
 }

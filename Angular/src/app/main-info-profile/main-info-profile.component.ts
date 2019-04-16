@@ -53,10 +53,12 @@ export class MainInfoProfileComponent implements OnInit {
       this.service.refreshInfo();
     },
       (error: HttpErrorResponse) => {
-        if (error.status === 400) {
+        if (error.status === 400 && error.error.ModelState !== undefined) {
           for (var key in error.error.ModelState)
             for (var i = 0; i < error.error.ModelState[key].length; i++)
               this.toastr.error(error.error.ModelState[key][i]);
+        } else if (error.status === 400) {
+          this.toastr.error(error.error.Message);
         } else {
           this.toastr.error("Cannot edit a profile!");
         }
@@ -73,10 +75,12 @@ export class MainInfoProfileComponent implements OnInit {
       Image.value = null;
     },
       (error: HttpErrorResponse) => {
-        if (error.status === 400) {
+        if (error.status === 400 && error.error.ModelState !== undefined) {
           for (var key in error.error.ModelState)
             for (var i = 0; i < error.error.ModelState[key].length; i++)
               this.toastr.error(error.error.ModelState[key][i]);
+        } else if (error.status === 400) {
+          this.toastr.error(error.error.Message);
         } else {
           this.toastr.error("Cannot change an image!");
         }

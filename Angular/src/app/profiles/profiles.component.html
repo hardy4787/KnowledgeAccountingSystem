@@ -21,7 +21,14 @@
       <option [value]="90">90</option>
       <option [value]="100">100</option>
     </select>
-    <button type="button" (click)="createReport(managerForm)" class="btn btn-sm btn-primary">Create report</button>
+    <button type="button" (click)="createReport(managerForm); isLoadingReport=true;"
+      class="btn btn-sm btn-primary">Create report</button>
+    <div *ngIf="isLoadingReport" class="ml-2">
+      <div class="spinner-border spinner-border-sm" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+      Please wait while the report loads...
+    </div>
   </form>
 </div>
 

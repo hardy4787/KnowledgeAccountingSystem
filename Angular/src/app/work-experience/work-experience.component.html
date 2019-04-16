@@ -89,7 +89,7 @@
               <div class="input-group">
                 <input type="text" bsDatepicker #dpCloseDate="bsDatepicker" [bsConfig]="datePickerConfig"
                   placement="right" class="form-control" name="CloseDate" #CloseDate="ngModel"
-                  [(ngModel)]="service.formData.CloseDate" placeholder="yyyy-mm-dd" required>
+                  [(ngModel)]="service.formData.CloseDate" placeholder="yyyy-mm-dd">
                 <div class="input-group-append">
                   <button class="btn btn-outline-secondary calendar" (click)="dpCloseDate.toggle()"
                     type="button"></button>

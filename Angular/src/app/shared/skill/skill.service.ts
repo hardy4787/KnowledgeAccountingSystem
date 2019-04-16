@@ -1,20 +1,28 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Skill } from './skill.model';
 import { Observable } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 @Injectable({
   providedIn: 'root'
 })
 export class SkillService {
   readonly rootUrl : string = 'http://localhost:16143/api/';
 
-  constructor(private http : HttpClient) { }
+  constructor(private http : HttpClient, private toastr : ToastrService) { }
 
 	fullSkillList: Skill[] = [];
   formData : Skill = new Skill();
 	
   getSkills(){
-    return this.http.get(this.rootUrl + "skills").toPromise().then(res=>this.fullSkillList = res as Skill[]);
+    return this.http.get(this.rootUrl + "skills").subscribe((data:any)=>{
+      this.fullSkillList = data as Skill[]
+    },
+    (error: HttpErrorResponse) => {
+      if(error.status === 500){
+        this.toastr.error("Not possible to get information!");
+      }
+    });
   }
 
   deleteSkill(id : number){

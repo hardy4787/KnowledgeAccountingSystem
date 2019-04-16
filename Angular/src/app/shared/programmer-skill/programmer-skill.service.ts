@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Skill } from '../skill/skill.model';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { HttpHeaders, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ProgrammerSkill } from './programmer-skill.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class ProgrammerSkillService {
 
   readonly rootUrl: string = 'http://localhost:16143/api/profile/';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private toastr : ToastrService) { }
 
 
   getUntouchedSkills() {
@@ -33,12 +34,20 @@ export class ProgrammerSkillService {
   postProgrammerSkill(formData: ProgrammerSkill) {
     formData.KnowledgeLevel = this.formData.KnowledgeLevel;
     formData.ProgrammerId = localStorage.getItem('userId');
-    alert(this.rootUrl + localStorage.getItem('userId') + "/skills");
     return this.http.post(this.rootUrl + localStorage.getItem('userId') + "/skills", formData);
   }
 
   refreshInfo() {
-    return this.http.get(this.rootUrl + localStorage.getItem('userId') + "/skills").toPromise().then(res => this.programmerSkillList = res as ProgrammerSkill[]);
+    return this.http.get(this.rootUrl + localStorage.getItem('userId') + "/skills").subscribe((data:any)=>{
+      this.programmerSkillList = data as ProgrammerSkill[]
+    },
+    (error: HttpErrorResponse) => {
+      if(error.status === 400){
+        this.toastr.error(error.error.Message);
+      } else {
+        this.toastr.error("Not possible to get information!");
+      }
+    });
   }
 
   deleteProgrammerSkill(id: number) {

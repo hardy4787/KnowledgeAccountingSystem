@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 export class SignUpComponent implements OnInit {
 
   user: User = new User();
-  constructor(private router : Router, private userService: UserService, private toastr: ToastrService) {
+  constructor(private router: Router, private userService: UserService, private toastr: ToastrService) {
   }
 
   ngOnInit() {
@@ -42,14 +42,16 @@ export class SignUpComponent implements OnInit {
           this.router.navigate(['/login']);
         }
       },
-      (error: HttpErrorResponse) => {
-        if (error.status === 400) {
-          for (var key in error.error.ModelState)
-            for (var i = 0; i < error.error.ModelState[key].length; i++)
-              this.toastr.error(error.error.ModelState[key][i]);
-        } else {
-          this.toastr.error("Cannot register an user!");
-        }
-      });
+        (error: HttpErrorResponse) => {
+          if (error.status === 400 && error.error.ModelState !== undefined) {
+            for (var key in error.error.ModelState)
+              for (var i = 0; i < error.error.ModelState[key].length; i++)
+                this.toastr.error(error.error.ModelState[key][i]);
+          } else if (error.status === 400) {
+            this.toastr.error(error.error.Message);
+          } else {
+            this.toastr.error("Cannot register an user!");
+          }
+        });
   }
 }

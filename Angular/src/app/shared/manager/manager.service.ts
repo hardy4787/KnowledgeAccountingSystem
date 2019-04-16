@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { Profile } from '../profile/profile.model';
 import { ProgrammerModel } from './manager.model';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Injectable({
@@ -16,7 +17,7 @@ export class ManagerService {
   profileList : Profile[] = [];
   readonly rootUrl = 'http://localhost:16143/api/manager'
 
-  constructor(private http : HttpClient, private router: Router) { }
+  constructor(private http : HttpClient, private router: Router, private toastr : ToastrService) { }
 
 
   refreshInfo(programmer : ProgrammerModel){
@@ -25,7 +26,14 @@ export class ManagerService {
     });
     this.router.navigate(['/manager', 'profiles'], { queryParams: { skillId : this.formData.SkillId, knowledgeLevel : this.formData.KnowledgeLevel } });
     return this.http.get(this.rootUrl + "/profiles", {
-      params : params }).toPromise().then(res=>this.profileList = res as Profile[]);
+      params : params }).subscribe((data:any)=>{
+        this.profileList = data as Profile[]
+      },
+      (error: HttpErrorResponse) => {
+        if(error.status === 500){
+          this.toastr.error("Not possible to get information!");
+        }
+      });
   }
   createReport(programmer : ProgrammerModel){
     const body: ProgrammerModel = {

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Project } from './project.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ import { Project } from './project.model';
 export class ProjectService {
   readonly rootUrl : string = 'http://localhost:16143/api/profile/';
 
-  constructor(private http : HttpClient) { }
+  constructor(private http : HttpClient, private toastr : ToastrService) { }
 
   formData : Project = new Project();
   projectList: Project[] = [];
@@ -29,7 +30,14 @@ export class ProjectService {
     return this.http.post(this.rootUrl + localStorage.getItem('userId') + "/projects", formData);
   }
   refreshInfo(){
-    return this.http.get(this.rootUrl + localStorage.getItem('userId') + "/projects").toPromise().then(res=>this.projectList = res as Project[]);
+    return this.http.get(this.rootUrl + localStorage.getItem('userId') + "/projects").subscribe((data:any)=>{
+      this.projectList = data as Project[]
+    },
+    (error: HttpErrorResponse) => {
+      if(error.status === 500){
+        this.toastr.error("Not possible to get information!");
+      }
+    });
   }
   
   deleteProject(id : number){

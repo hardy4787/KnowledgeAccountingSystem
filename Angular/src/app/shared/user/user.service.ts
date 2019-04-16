@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from './user.model';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Injectable({
@@ -10,7 +11,7 @@ import { User } from './user.model';
 })
 export class UserService {
   readonly rootUrl = 'http://localhost:16143'
-  constructor(private http : HttpClient) { }
+  constructor(private http : HttpClient, private toastr : ToastrService) { }
   deleteUser(){
     return this.http.delete(this.rootUrl + '/api/Account/' + localStorage.getItem('userId'));
   }

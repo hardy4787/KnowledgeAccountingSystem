@@ -17,7 +17,7 @@ export class AuthInterceptor implements HttpInterceptor {
 			});
 			return next.handle(clonedreq).pipe(
 				tap(
-					succ => { },
+					() => { },
 					err => {
 						if (err.status === 401) {
 							this.router.navigateByUrl('/login');
@@ -26,9 +26,8 @@ export class AuthInterceptor implements HttpInterceptor {
 							this.router.navigateByUrl('/forbidden');
 						}
 						if (err.status === 404) {
-							this.router.navigateByUrl('/not-found');
+							this.router.navigateByUrl('not-found', {skipLocationChange: true});
 						}
-
 					}
 				)
 			);

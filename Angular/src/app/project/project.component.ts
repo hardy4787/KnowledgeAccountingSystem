@@ -17,11 +17,11 @@ export class ProjectComponent implements OnInit {
   @ViewChild('projectModal') public projectModal: ModalDirective;
   datePickerConfig: Partial<BsDatepickerConfig>;
   project: Project = new Project();
-  constructor(private service : ProjectService, private roleService : RoleService, private toastr : ToastrService) {
+  constructor(private service: ProjectService, private roleService: RoleService, private toastr: ToastrService) {
     this.datePickerConfig = Object.assign({},
       {
-        containerClass : 'theme-dark-blue',
-        dateInputFormat : 'YYYY-MM-DD'
+        containerClass: 'theme-dark-blue',
+        dateInputFormat: 'YYYY-MM-DD'
       });
   }
 
@@ -29,75 +29,77 @@ export class ProjectComponent implements OnInit {
     this.service.refreshInfo();
   }
 
-  resetForm(form? : NgForm){
-    if(form!=null)
+  resetForm(form?: NgForm) {
+    if (form != null)
       form.resetForm();
     this.service.formData = {
-      Id : null,
-      Name : '',
-      ReferenceToTheProject : '',
-      DescriptionOfTasks : '',
-      ProgrammerId : null
+      Id: null,
+      Name: '',
+      ReferenceToTheProject: '',
+      DescriptionOfTasks: '',
+      ProgrammerId: null
     }
   }
 
-  populateForm(project : Project){
-    this.service.formData = Object.assign({},project);
+  populateForm(project: Project) {
+    this.service.formData = Object.assign({}, project);
   }
 
-  onSubmit(form : NgForm){
+  onSubmit(form: NgForm) {
     this.projectModal.hide();
-    if(form.value.Id == null)
+    if (form.value.Id == null)
       this.insertProject(form);
     else
       this.updateRecord(form);
-  } 
-  
-  updateRecord(form:NgForm){
-    this.service.putInfo(form.value).subscribe((data:any) =>{
+  }
+
+  updateRecord(form: NgForm) {
+    this.service.putInfo(form.value).subscribe((data: any) => {
       this.toastr.warning(data.Message)
       this.service.refreshInfo();
     },
-    (error: HttpErrorResponse) => {
-      if (error.status === 400) {
-        for (var key in error.error.ModelState)
-          for (var i = 0; i < error.error.ModelState[key].length; i++)
-            this.toastr.error(error.error.ModelState[key][i]);
-      } else {
-        this.toastr.error("Cannot updated a project!");
-      }
-    });
+      (error: HttpErrorResponse) => {
+        if (error.status === 400 && error.error.ModelState !== undefined) {
+          for (var key in error.error.ModelState)
+            for (var i = 0; i < error.error.ModelState[key].length; i++)
+              this.toastr.error(error.error.ModelState[key][i]);
+        } else if (error.status === 400) {
+          this.toastr.error(error.error.Message);
+        } else {
+          this.toastr.error("Cannot updated a project!");
+        }
+      });
   }
 
-  insertProject(form: NgForm){
-    this.service.postProject(form.value).subscribe((data:any)=>{
-    this.toastr.success(data.Message);
-    this.service.refreshInfo();
+  insertProject(form: NgForm) {
+    this.service.postProject(form.value).subscribe((data: any) => {
+      this.toastr.success(data.Message);
+      this.service.refreshInfo();
     },
-    (error: HttpErrorResponse) => {
-      if (error.status === 400) {
-        for (var key in error.error.ModelState)
-          for (var i = 0; i < error.error.ModelState[key].length; i++)
-            this.toastr.error(error.error.ModelState[key][i]);
-      } else {
-        this.toastr.error("Cannot inserted a project!");
-      }
-    });
+      (error: HttpErrorResponse) => {
+        if (error.status === 400 && error.error.ModelState !== undefined) {
+          for (var key in error.error.ModelState)
+            for (var i = 0; i < error.error.ModelState[key].length; i++)
+              this.toastr.error(error.error.ModelState[key][i]);
+        } else if (error.status === 400) {
+          this.toastr.error(error.error.Message);
+        } else {
+          this.toastr.error("Cannot inserted a project!");
+        }
+      });
   }
 
-  onDelete(id : number){
-    this.service.deleteProject(id).subscribe((data:any)=>{
-    this.toastr.error(data.Message)
-    this.service.refreshInfo();
+  onDelete(id: number) {
+    this.service.deleteProject(id).subscribe((data: any) => {
+      this.toastr.error(data.Message)
+      this.service.refreshInfo();
     },
-    (error: HttpErrorResponse) => {
-      if (error.status === 400) {
-        for (var key in error.error.ModelState)
-          for (var i = 0; i < error.error.ModelState[key].length; i++)
-            this.toastr.error(error.error.ModelState[key][i]);
-      } else {
-        this.toastr.error("Cannot deleted a project!");
-      }
-    });
+      (error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          this.toastr.error(error.error.Message);
+        } else {
+          this.toastr.error("Cannot deleted a project!");
+        }
+      });
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { WorkExperience } from './work-experience.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class WorkExperienceService {
   readonly rootUrl : string = 'http://localhost:16143/api/profile/';
 
-  constructor(private http : HttpClient) { }
+  constructor(private http : HttpClient, private toastr : ToastrService) { }
 
   formData : WorkExperience = new WorkExperience();
   workExperienceList: WorkExperience[] = [];
@@ -27,11 +28,19 @@ export class WorkExperienceService {
   }
   
   postWorkExperience(formData : WorkExperience){
+    alert(formData.Id);
     formData.ProgrammerId = localStorage.getItem('userId');
     return this.http.post(this.rootUrl + localStorage.getItem('userId') + "/work-experience", formData);
   }
   refreshInfo(){
-    return this.http.get(this.rootUrl + localStorage.getItem('userId') + "/work-experience").toPromise().then(res=>this.workExperienceList = res as WorkExperience[]);
+    return this.http.get(this.rootUrl + localStorage.getItem('userId') + "/work-experience").subscribe((data:any)=>{
+      this.workExperienceList = data as WorkExperience[]
+    },
+    (error: HttpErrorResponse) => {
+      if(error.status === 500){
+        this.toastr.error("Not possible to get information!");
+      }
+    });
   }
   
   deleteWorkExperience(id : number){

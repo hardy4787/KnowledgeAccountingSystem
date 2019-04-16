@@ -14,20 +14,16 @@ import { SkillService } from '../shared/skill/skill.service';
   styleUrls: ['./manager.component.css']
 })
 export class ManagerComponent implements OnInit {
-  isCollapsed : boolean  = true;
-  constructor(private service : ManagerService, private skillService : SkillService,private sanitizer:DomSanitizer, private router: Router, private toastr : ToastrService) { }
+  isCollapsed: boolean = true;
+  constructor(private service: ManagerService, private skillService: SkillService, private sanitizer: DomSanitizer, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit() {
     localStorage.removeItem('userId');
   }
-
-
-  LogOut(){
+  LogOut() {
     localStorage.removeItem('userToken');
     localStorage.removeItem('userId');
     console.log('userToken');
     this.router.navigate(['/login']);
   }
-
-
 }

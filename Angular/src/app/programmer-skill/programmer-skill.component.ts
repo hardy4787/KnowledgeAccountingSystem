@@ -17,97 +17,99 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class ProgrammerSkillComponent implements OnInit {
   @ViewChild('programmerSkillModal') public programmerSkillModal: ModalDirective;
   skill: Skill = new Skill();
-  constructor(private service : ProgrammerSkillService, private skillService : SkillService,private roleService : RoleService, private toastr : ToastrService) {
+  constructor(private service: ProgrammerSkillService, private skillService: SkillService, private roleService: RoleService, private toastr: ToastrService) {
   }
-  conditionAddForm : boolean = true;
+  conditionAddForm: boolean = true;
   ngOnInit() {
     this.skillService.getSkills();
     this.service.refreshInfo();
   }
-  valueSlider : number = 0;
+  valueSlider: number = 0;
 
-  getUntouchedSkills(){
+  getUntouchedSkills() {
     this.service.getUntouchedSkills();
   }
 
-  getNameSkillByIdSkill(id : number) : string {
-    if(id !== null)
-      return this.skillService.fullSkillList.find(x => x.Id== id).Name;
+  getNameSkillByIdSkill(id: number): string {
+    if (id !== null)
+      return this.skillService.fullSkillList.find(x => x.Id == id).Name;
   }
 
-  getTooltipSkillByIdSkill(id : number) : string {
-    if(id != null)
-      return this.skillService.fullSkillList.find(x => x.Id== id).Description;
+  getTooltipSkillByIdSkill(id: number): string {
+    if (id != null)
+      return this.skillService.fullSkillList.find(x => x.Id == id).Description;
   }
 
-  resetForm(form? : NgForm){
-    if(form!=null)
+  resetForm(form?: NgForm) {
+    if (form != null)
       form.resetForm();
     this.service.formData = {
-      SkillId : null,
-      KnowledgeLevel : null,
-      ProgrammerId : null
+      SkillId: null,
+      KnowledgeLevel: null,
+      ProgrammerId: null
     }
   }
 
-  populateForm(programmerSkill : ProgrammerSkill){
-    this.service.formData = Object.assign({},programmerSkill);
+  populateForm(programmerSkill: ProgrammerSkill) {
+    this.service.formData = Object.assign({}, programmerSkill);
   }
 
-  onSubmit(form : NgForm){
+  onSubmit(form: NgForm) {
     this.programmerSkillModal.hide();
-  if(this.conditionAddForm)
-    this.insertProgrammerSkill(form);
-  else
-    this.updateProgrammerSkill(form);
-  } 
-  
-  updateProgrammerSkill(form:NgForm){
-    this.service.putProgrammerSkill(form.value).subscribe((data : any) =>{
+    if (this.conditionAddForm)
+      this.insertProgrammerSkill(form);
+    else
+      this.updateProgrammerSkill(form);
+  }
+
+  updateProgrammerSkill(form: NgForm) {
+    this.service.putProgrammerSkill(form.value).subscribe((data: any) => {
       this.toastr.warning(data.Message)
       this.service.refreshInfo();
     },
-    (error: HttpErrorResponse) => {
-      if (error.status === 400) {
-        for (var key in error.error.ModelState)
-          for (var i = 0; i < error.error.ModelState[key].length; i++)
-            this.toastr.error(error.error.ModelState[key][i]);
-      } else {
-        this.toastr.error("Cannot updated a skill!");
-      }
-    });
+      (error: HttpErrorResponse) => {
+        if (error.status === 400 && error.error.ModelState !== undefined) {
+          for (var key in error.error.ModelState)
+            for (var i = 0; i < error.error.ModelState[key].length; i++)
+              this.toastr.error(error.error.ModelState[key][i]);
+        } else if (error.status === 400) {
+          this.toastr.error(error.error.Message);
+        } else {
+          this.toastr.error("Cannot updated a skill!");
+        }
+      });
   }
 
-  insertProgrammerSkill(form: NgForm){
-    this.service.postProgrammerSkill(form.value).subscribe((data : any)=>{
-    this.toastr.success(data.Message);
-    this.service.refreshInfo();
+  insertProgrammerSkill(form: NgForm) {
+    this.service.postProgrammerSkill(form.value).subscribe((data: any) => {
+      this.toastr.success(data.Message);
+      this.service.refreshInfo();
     },
-    (error: HttpErrorResponse) => {
-      if (error.status === 400) {
-        for (var key in error.error.ModelState)
-          for (var i = 0; i < error.error.ModelState[key].length; i++)
-            this.toastr.error(error.error.ModelState[key][i]);
-      } else {
-        this.toastr.error("Cannot inserted a skill!");
-      }
-    });
+      (error: HttpErrorResponse) => {
+        if (error.status === 400 && error.error.ModelState !== undefined) {
+          for (var key in error.error.ModelState)
+            for (var i = 0; i < error.error.ModelState[key].length; i++)
+              this.toastr.error(error.error.ModelState[key][i]);
+        } else if (error.status === 400) {
+          this.toastr.error(error.error.Message);
+        } else {
+          this.toastr.error("Cannot inserted a skill!");
+        }
+      });
   }
 
-  onDelete(id : number){
-    this.service.deleteProgrammerSkill(id).subscribe((data : any)=>{
-    this.toastr.error(data.Message)
-    this.service.refreshInfo();
+  onDelete(id: number) {
+    this.service.deleteProgrammerSkill(id).subscribe((data: any) => {
+      this.toastr.error(data.Message)
+      this.service.refreshInfo();
     },
-    (error: HttpErrorResponse) => {
-      if (error.status === 400) {
-        for (var key in error.error.ModelState)
-          for (var i = 0; i < error.error.ModelState[key].length; i++)
-            this.toastr.error(error.error.ModelState[key][i]);
-      } else {
-        this.toastr.error("Cannot deleted a skill!");
-      }
-    });
+      (error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          this.toastr.error(error.error.Message);
+        } else {
+          this.toastr.error("Cannot deleted a skill!");
+        }
+      });
   }
 
 }

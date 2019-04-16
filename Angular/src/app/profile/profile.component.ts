@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { RoleService } from '../shared/user/role.service';
 import { UserService } from '../shared/user/user.service';
 import { ToastrService } from 'ngx-toastr';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-profile',
@@ -26,10 +27,17 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
   }
   deleteUser(){
-    this.userService.deleteUser().subscribe(res =>{
+    this.userService.deleteUser().subscribe((data:any) =>{
       this.toastr.warning('Deleted successfully', 'Profile deleted')
       this.router.navigate(['/login']);
-    });;
+    },
+    (error: HttpErrorResponse) => {
+      if (error.status === 400) {
+            this.toastr.error(error.error.Message);
+      } else {
+        this.toastr.error("Cannot edit a profile!");
+      }
+    });
   }
   LogOut(){
     localStorage.removeItem('userToken');
@@ -42,8 +50,4 @@ export class ProfileComponent implements OnInit {
   toggleMenu(){
     this.isOpened = !this.isOpened;
   }
-
-
-  
-
 }

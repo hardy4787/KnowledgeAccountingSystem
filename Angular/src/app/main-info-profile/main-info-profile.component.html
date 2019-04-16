@@ -73,7 +73,7 @@
               [(ngModel)]="service.formData.ImageProfileUrl">
             <div class="form-group">
               <label data-error="Required field!">Full Name</label>
-              <input type="text" class="form-control" maxlength="64" name="FullName" #FullName="ngModel"
+              <input type="text" class="form-control" maxlength="100" name="FullName" #FullName="ngModel"
                 [(ngModel)]="service.formData.FullName" required checkspaces>
               <div class="validation-error" *ngIf="FullName.invalid && FullName.touched">This field is required</div>
             </div>
