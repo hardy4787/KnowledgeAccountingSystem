@@ -84,7 +84,7 @@ namespace UIWebApi.Controllers
                 {
                     return InternalServerError();
                 }
-                postedFile.SaveAs("C:/Users/BogdanHristich/source/repos/KnowledgeAccountingSystem/Angular/src/assets/image-profiles/" + userId + Path.GetExtension(postedFile.FileName));
+                postedFile.SaveAs("C:/Users/Bohdan_Khrystych/Desktop/New-folder/KnowledgeAccountingSystem/Angular/src/assets/image-profiles/" + userId + Path.GetExtension(postedFile.FileName));
             }
             else
             {
